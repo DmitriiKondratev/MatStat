@@ -1,0 +1,260 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{misccorr}
+
+\usepackage{graphicx}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.png,.jpg}
+
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+	\begin{titlepage}
+		\begin{center}			
+			Санкт-Петербургский политехнический университет\\
+			Петра Великого
+			\vspace{0.25cm}
+			
+			Институт прикладной математики и механики
+			
+			Кафедра «Прикладная математика»
+			\vfill
+			
+			\textbf{Отчёт\\
+				по лабораторной работе №3\\
+				по дисциплине\\
+				«Математическая статистика»}\\[5mm]
+			\bigskip
+		\end{center}
+		\vfill
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Выполнил студент:
+			\vspace{0.2cm}
+			
+			Кондратьев~Д.~А.\\
+			группа: 3630102/70301
+		\end{minipage}%
+		\bigskip
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Проверил:
+			\vspace{0.2cm}
+			
+			к.ф.-м.н., доцент\\
+			Баженов Александр Николаевич
+		\end{minipage}%
+		\vfill
+		
+		\begin{center}
+			Санкт-Петербург\\
+			2020 г.
+		\end{center}
+	\end{titlepage}
+	
+	
+	
+	\tableofcontents{}
+	\listoftables
+	\listoffigures
+	
+	\newpage
+	\section{Постановка задачи}
+	
+	Для 5-ти рапределений:
+	\begin{itemize}
+		\item Нормальное распределение $N(x,0,1)$;
+		\item Распределение Коши $C(x,0,1)$;
+		\item Распределение Лапласа $L( x,0,\frac{1}{\sqrt{2}})$;
+		\item Распределение Пуассона $P(k, 10)$;
+		\item Равномерное Распределение $U(x,-\sqrt{3}, \sqrt{3})$;
+	\end{itemize}
+	Сгенерировать выборки размером 20 и 100 элементов. Построить для них боксплот Тьюки.
+	
+	Для каждого распределения определить долю выбросов экспериментально (сгенерировав выборку, соответствующую распределению 1000 раз, и вычислив среднюю долю выбросов) и сравнить с результатами, полученными теоретически.
+	
+	\section{Теория}
+	\subsection{Распределения}
+	\begin{itemize}
+		\item Нормальное распределение \begin{equation}\label{eqn:normal}
+		N(x,0,1) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}
+		\end{equation}
+		
+		\item Распределение Коши
+		\begin{equation}\label{eqn:cauchy}
+		C(x,0,1) = \frac{1}{\pi(1+x^2)}
+		\end{equation}
+		
+		\item Распределение Лапласа
+		\begin{equation}\label{eqn:laplace}
+		L\left( x,0,\frac{1}{\sqrt{2}}\right) = \frac{1}{\sqrt{2}}e^{-\sqrt{2}\vert x\vert}
+		\end{equation}
+		
+		\item Распределение Пуассона
+		\begin{equation}\label{eqn:poisson}
+		P(k,10) = \frac{10^k}{k!}e^{-10}
+		\end{equation}
+		
+		\item Равномерное Распределение
+		\begin{equation}\label{eqn:uniform}
+		U(x,-\sqrt{3}, \sqrt{3}) = 
+		\begin{cases}
+		\frac{1}{2\sqrt{3}} &\vert x\vert \leqslant \sqrt{3}\\
+		0 &\vert x\vert > \sqrt{3}
+		\end{cases}
+		\end{equation}
+	\end{itemize}
+	
+	\subsection{Боксплот Тьюки}
+	\subsubsection{Определение}
+		Боксплот (англ. box plot) — график, использующийся в описательной статистике, компактно изображающий одномерное распределение вероятностей.
+		
+	\subsubsection{Описание}
+		Такой вид диаграммы в удобной форме показывает медиану, нижний и верхний квартили и выбросы. Несколько таких ящиков можно нарисовать бок о бок, чтобы визуально сравнивать одно распределение с другим; их можно располагать как горизонтально, так и вертикально. Расстояния между различными частями ящика позволяют определить степень разброса (дисперсии) и асимметрии данных и выявить выбросы [\ref{Box plot}].
+		
+	\subsubsection{Построение}
+		Границами ящика служат первый и третий квартили, линия в середине
+		ящика — медиана. Концы усов — края статистически значимой выборки
+		(без выбросов). Длину «усов» определяют разность первого квартиля и полутора межквартильных расстояний и сумма третьего квартиля и полутора
+		межквартильных расстояний. Формула имеет вид:
+		\begin{equation}\label{eqn:box_plot}
+		X_1 = Q_1 - \frac{3}{2}(Q_3 - Q_1),\  X_2 = Q_3 + \frac{3}{2}(Q_3 - Q_1)
+		\end{equation}
+		где $X_1$ --- нижняя граница уса, $X_2$ --- верхняя граица уса, $Q_1$ --- первый квартиль, $Q_3$ --- третий квартиль.
+		
+		Данные, выходящие за границы усов (выбросы), отображаются на графике
+		в виде маленьких кружков.
+		
+		
+		
+	\subsection{Теоретическая вероятность выбросов}
+		Встроенными средствами языка программирования \emph{Python} можно вычислить теоретические первый и третий квартили распределений ($Q^T_1$ и $Q^T_3$ соответственно). По формуле (\ref{eqn:box_plot}) можно вычислить теоретические нижнюю и верхнюю границы уса ($X^T_1$ и $X^T_3$ соответственно). Выбросами считаются величины $x$, такие что:
+		\begin{equation}\label{eqn:outliers}
+		\left[ \begin{array}{l}
+			x < X^T_1 \\
+			x > X^T_3
+		\end{array} \right.
+		\end{equation}
+		Теоретическая вероятность выбросов для непрерывных распределений:
+		\begin{equation}\label{eqn:continous_prob}
+			P^T_{out} = P(x < X^T_1) + P(x > X^T_2) = F(X^T_1) + (1-F(X^T_2)),
+		\end{equation}
+		где $F(X) = P(x \leq X)$ --- функция распределения.
+		Теоретическая вероятность выбросов для дискретных распределений:
+		\begin{equation}\label{eqn:discrete_prob}
+			P^T_{out} = P(x < X^T_1) + P(x > X^T_2) = (F(X^T_1) - P(x = X^T_1)) + (1-F(X^T_2)),
+		\end{equation}
+		где $F(X) = P(x \leq X)$ --- функция распределения.
+		
+	\section{Реализация}
+	Лабораторная работа выполнена на программном языке \emph{Python\;3.8} в среде разработки \emph{Jupyter Notebook\;6.0.3}. В работе использовались следующие пакеты языка \emph{Python}:
+	\begin{itemize}
+		\item \emph{numpy} --- для генерации выборки и работы с массивами;
+		
+		\item \emph{matplotlib.pyplot} --- для построения боксплотов Тьюки;
+		
+		\item \emph{scipy.stats} --- содержит все необходимые распределения, а также именно с помощью него можно получить теоретические оценки.
+	\end{itemize}
+	Ссылка на исходный код лабораторной работы приведена в приложении.
+
+	\section{Результаты}
+	\subsection{Доля выбросов}
+	\begin{center}
+		\begin{table}[h]
+			\caption{Доля выбросов}
+			\begin{center}
+				\begin{tabular}{|c|c|c|}
+					\hline
+					Распределение & $n=20$ & $n=100$\\
+					\hline
+					Нормальное распределение & $0.0239$ & $0.0101$\\
+					\hline
+					Распределение Коши & $0.1516$ & $0.1544$\\
+					\hline
+					Распределение Лапласа & $0.0739$ & $0.0632$\\
+					\hline
+					Распределение Пуассона & $0.0242$ & $0.0105$\\
+					\hline
+					Равномерное распределение & $0.0020$ & $0.0$\\
+					\hline
+				\end{tabular}
+			\end{center}
+		\end{table}
+	\end{center}
+	
+	\newpage
+	\subsection{Теоретическая вероятность выбросов}
+	\begin{center}
+		\begin{table}[h]
+			\caption{Теоретическая вероятность выбросов}
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|}
+					\hline
+					Распределение & $Q^T_1$ & $Q^T_3$ & $X^T_1$ (\ref{eqn:box_plot}) & $X^T_2$ (\ref{eqn:box_plot}) & $P^T_{out}$ (\ref{eqn:continous_prob}), (\ref{eqn:discrete_prob})\\
+					\hline
+					Нормальное распределение & $-0.6745$ & $0.6745$ & $-2.698$ & $2.698$ & $0.007$\\
+					\hline
+					Распределение Коши & $-1$ & $1$ & $-4$ & $4$ & $0.156$\\
+					\hline
+					Распределение Лапласа & $-0.4901$ & $0.4901$ & $-1.9605$ & $1.9605$ & $0.0625$\\
+					\hline
+					Распределение Пуассона & $8$ & $12$ & $2$ & $18$ & $0.0077$\\
+					\hline
+					Равномерное распределение & $-0.866$ & $0.866$ & $-3.4641$ & $3.4641$ & $0$\\
+					\hline
+				\end{tabular}
+			\end{center}
+		\end{table}
+	\end{center}
+
+	\subsection{Боксплот Тьюки}
+	\begin{center}
+		\begin{figure}[h!]
+			\includegraphics[width=\textwidth]{"Normal distribution"} 
+			\caption[Нормальное распределение]{Нормальное распределение}
+		\end{figure}
+		
+		\newpage
+		\begin{figure}[h!]
+			\includegraphics[width=\textwidth]{"Cauchy distribution"}
+			\caption[Распределение Коши]{Распределение Коши}
+			
+			\includegraphics[width=\textwidth]{"Laplace distribution"}
+			\caption[Распределение Лапласа]{Распределение Лапласа}
+		\end{figure}
+		
+		\newpage
+		\begin{figure}[h!]
+			\includegraphics[width=\textwidth]{"Poisson distribution"}
+			\caption[Распределение Пуассона]{Распределение Пуассона}
+			
+			\includegraphics[width=\textwidth]{"Uniform distribution"}
+			\caption[Равномерное распределение]{Равномерное распределение}
+		\end{figure}
+	\end{center}
+
+	\section{Обсуждение}
+	Исходя из полученных результатов можно сделать следующие выводы:
+	\begin{itemize}
+		\item Справедливо следующее соотношение для долей выбросов:\\
+		равномерное распределение < нормальное распределение < распределение Пуассона < распределение Лапласа < распределение Коши.
+		
+		\item Доля выбросов, полученная экспериментально, близка с результатами, полученными теоретически.
+	\end{itemize}
+	
+	\section{Литература}
+	\begin{enumerate}
+		\item \label{Box plot} Box plot. URL: \url{https://en.wikipedia.org/wiki/Box_plot}
+	\end{enumerate}
+
+	\section{Приложение}
+	\begin{enumerate}
+		\item Код лабораторной. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_3/Lab_3.ipynb}
+		
+		\item Код отчёта. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_3/Lab_report_3.tex}
+		
+	\end{enumerate}
+\end{document}
