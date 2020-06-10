@@ -1,0 +1,313 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{misccorr}
+
+\usepackage{graphicx}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.png,.jpg}
+
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+	\begin{titlepage}
+		\begin{center}			
+			Санкт-Петербургский политехнический университет\\
+			Петра Великого
+			\vspace{0.25cm}
+			
+			Институт прикладной математики и механики
+			
+			Кафедра «Прикладная математика»
+			\vfill
+			
+			\textbf{Отчёт\\
+				по лабораторной работе №1\\
+				по дисциплине\\
+				«Математическая статистика»}\\[5mm]
+			\bigskip
+		\end{center}
+		\vfill
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Выполнил студент:
+			\vspace{0.2cm}
+			
+			Кондратьев~Д.~А.\\
+			группа: 3630102/70301
+		\end{minipage}%
+		\bigskip
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Проверил:
+			\vspace{0.2cm}
+			
+			к.ф.-м.н., доцент\\
+			Баженов Александр Николаевич
+		\end{minipage}%
+		\vfill
+		
+		\begin{center}
+			Санкт-Петербург\\
+			2020 г.
+		\end{center}
+	\end{titlepage}
+	
+	
+	
+	\tableofcontents{}
+	\newpage
+	
+	\section{Постановка задачи}
+	
+	Для 5-ти рапределений:
+	\begin{itemize}
+		\item Нормальное распределение $N(x,0,1)$;
+		\item Распределение Коши $C(x,0,1)$;
+		\item Распределение Лапласа $L( x,0,\frac{1}{\sqrt{2}})$;
+		\item Распределение Пуассона $P(k, 10)$;
+		\item Равномерное Распределение $U(x,-\sqrt{3}, \sqrt{3})$;
+	\end{itemize}
+	Сгенерировать выборки размером 10, 100 и 1000 элементов. Для каждой выборки вычислить следующие статистические характеристики положения данных: $\overline{x}, med\;x, z_R, z_Q, z_{tr}$. Повторить такие вычисления 1000 раз для каждой выборки и найти среднее характеристик положения и их квадратов:
+	\begin{equation}\label{eqn:expected_value}
+	E(z)=\overline{z}
+	\end{equation}
+	Вычислить оценку дисперсии по формуле:
+	\begin{equation}\label{eqn:variance}
+	D(z)=\overline{z^2}-\overline{z}^2
+	\end{equation}
+	Представить полученные данные в виде таблиц.
+	
+	\section{Теория}
+	\subsection{Распределения}
+	\begin{itemize}
+		\item Нормальное распределение \begin{equation}\label{eqn:normal}
+		N(x,0,1) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}
+		\end{equation}
+		
+		\item Распределение Коши
+		\begin{equation}\label{eqn:cauchy}
+		C(x,0,1) = \frac{1}{\pi(1+x^2)}
+		\end{equation}
+		
+		\item Распределение Лапласа
+		\begin{equation}\label{eqn:laplace}
+		L\left( x,0,\frac{1}{\sqrt{2}}\right) = \frac{1}{\sqrt{2}}e^{-\sqrt{2}\vert x\vert}
+		\end{equation}
+		
+		\item Распределение Пуассона
+		\begin{equation}\label{eqn:poisson}
+		P(k,10) = \frac{10^k}{k!}e^{-10}
+		\end{equation}
+		
+		\item Равномерное Распределение
+		\begin{equation}\label{eqn:uniform}
+		U(x,-\sqrt{3}, \sqrt{3}) = 
+		\begin{cases}
+		\frac{1}{2\sqrt{3}} &\vert x\vert \leqslant \sqrt{3}\\
+		0 &\vert x\vert > \sqrt{3}
+		\end{cases}
+		\end{equation}
+	\end{itemize}
+	
+	\subsection{Вариационный ряд}
+		Вариационным рядом называется последовательность элементов выборки, расположенных в неубывающем порядке. Одинаковые элементы повторяются  [\ref{Book_1}, с. 409].
+		
+		Запись вариационного ряда: $x_1, x_2, ... , x_n$.
+		
+		Элементы вариационного ряда $x_i\ (i = 1,2, ... ,n)$ называются порядковыми статистиками.
+	
+	\subsection{Выборочные числовые характеристики}
+		С помощью выборки образуются её числовые характеристики. Это числовые характеристики дискретной случайной величины $X^*$, принимающей выборочные значения $x_1, x_2, ... , x_n$ [\ref{Book_1}, с. 411].
+		
+	\subsubsection{Характеристики положения}
+	\begin{itemize}
+		\item Выборочное среднее:
+		\begin{equation}\label{eqn:average}
+			\overline{x} = \frac{1}{n}\sum_{i=1}^n x_i
+		\end{equation}
+		
+		\item Выборочная медиана:
+		\begin{equation}\label{eqn:med}
+			med\;x =
+			\begin{cases}
+				x_{k+1}, & n = 2k+1\\
+				\frac{1}{2}\left(x_k+x_{k+1}\right), & n = 2k
+			\end{cases}
+		\end{equation}
+		
+		\item Полусумма экстремальных выборочных элементов:
+		\begin{equation}\label{eqn:mean_extr}
+			z_R = \frac{1}{2}\left(x_1+x_n\right)
+		\end{equation}
+		
+		\item Полусумма квартилей:
+		\begin{equation}\label{eqn:quartiles}
+			z_Q = \frac{1}{2}\left(z_{\frac{1}{4}}+z_{\frac{3}{4}}\right) 
+		\end{equation}
+		
+		\item Усечённое среднее:
+		\begin{equation}\label{eqn:trim_mean}
+			z_{tr} = \frac{1}{n - 2r}\sum_{i=r+1}^{n-r} x_i,\ r\approx\frac{n}{4}
+		\end{equation}
+	\end{itemize}
+
+	\subsubsection{Характеристики рассеяния}
+		Выборочная дисперсия:
+		\begin{equation}\label{eqn:var}
+			D = \frac{1}{n}\sum_{i=1}^n (x_i-\overline{x})^2
+		\end{equation}
+	
+	\section{Реализация}
+	Лабораторная работа выполнена на программном языке \emph{Python\;3.8} в среде разработки \emph{Jupyter Notebook\;6.0.3}. В работе использовались следующие пакеты языка \emph{Python}:
+	\begin{itemize}
+		\item \emph{numpy} --- для генерации выборки и работы с массивами;
+		\item \emph{scipy.stats} --- содержит все необходимые распределения.
+	\end{itemize}
+	Ссылка на исходный код лабораторной работы приведена в приложении.
+
+	\newpage
+	\section{Результаты}
+	\subsection{Характеристики положения и рассеяния}
+	\begin{center}
+		\begin{table}[h]
+			\caption{Нормальное распределение}
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|c|}
+					\hline
+					& \multicolumn{2}{c|}{$n=10$} & \multicolumn{2}{c|}{$n=100$} & \multicolumn{2}{c|}{$n=1000$}\\
+					\hline
+					 & $E(x)$ (\ref{eqn:expected_value}) & $D(x)$ (\ref{eqn:variance}) & $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$\\
+					\hline
+					$\overline{x}$ (\ref{eqn:average}) & $-0.0021$ & $0.0985$ & $0.0023$ & $0.0107$ & $-0.0017$ & $0.0010$\\
+					\hline
+					$med\;x$ (\ref{eqn:med}) & $-0.0090$ & $0.1337$ & $0.0035$ & $0.0149$ & $-0.0010$ & $0.0016$\\
+					\hline
+					$z_R$ (\ref{eqn:mean_extr}) & $-0.0017$ & $0.1847$ & $0.0010$ & $0.0928$ & $-0.0056$ & $0.0630$\\
+					\hline
+					$z_Q$ (\ref{eqn:quartiles}) & $-0.0015$ & $0.1177$ & $-0.0133$ & $0.0132$ & $-0.0039$ & $0.0012$\\
+					\hline
+					$z_{tr} (\ref{eqn:trim_mean}) $ & $-0.0033$ & $0.1113$ & $0.0020$ & $0.0123$ & $-0.0017$ & $0.0012$\\
+					\hline
+				\end{tabular}
+			\end{center}
+		\end{table}
+	
+		\begin{table}[h]
+			\caption{Распределение Коши}
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|c|}
+					\hline
+					& \multicolumn{2}{c|}{$n=10$} & \multicolumn{2}{c|}{$n=100$} & \multicolumn{2}{c|}{$n=1000$}\\
+					\hline
+					& $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$\\
+					\hline
+					$\overline{x}$ & $2.8525$ & $8261.4971$ & $-0.2714$ & $282.5623$ & $-0.6571$ & $1680.6291$\\
+					\hline
+					$med\;x$ & $-0.0043$ & $0.3821$ & $-0.0046$ & $0.0260$ & $-0.0015$ & $0.0024$\\
+					\hline
+					$z_R$ & $14.1643$ & $206063$ & $-10.5066$ & $693687$ & $-358.4519$ & $417271337$\\
+					\hline
+					$z_Q$ & $0.0312$ & $1.2177$ & $-0.0336$ & $0.0493$ & $-0.0029$ & $0.0049$\\
+					\hline
+					$z_{tr}$ & $0.0049$ & $0.5952$ & $-0.0038$ & $0.0261$ & $-0.0013$ & $0.0026$\\
+					\hline
+				\end{tabular}
+			\end{center}
+		\end{table}
+	
+		\begin{table}[h!]
+			\caption{Распределение Лапласа}
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|c|}
+					\hline
+					& \multicolumn{2}{c|}{$n=10$} & \multicolumn{2}{c|}{$n=100$} & \multicolumn{2}{c|}{$n=1000$}\\
+					\hline
+					& $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$\\
+					\hline
+					$\overline{x}$ & $-0.0197$ & $0.0897$ & $-0.0015$ & $0.0099$ & $0.0017$ & $0.0010$\\
+					\hline
+					$med\;x$ & $-0.0158$ & $0.0648$ & $0.0025$ & $0.0058$ & $0.0003$ & $0.0005$\\
+					\hline
+					$z_R$ & $-0.0338$ & $0.3887$ & $-0.0052$ & $0.4090$ & $-0.0022$ & $0.4084$\\
+					\hline
+					$z_Q$ & $-0.0143$ & $0.0943$ & $-0.0135$ & $0.0100$ & $-0.0005$ & $0.0010$\\
+					\hline
+					$z_{tr}$ & $-0.0132$ & $0.0662$ & $0.0010$ & $0.0063$ & $0.0007$ & $0.0006$\\
+					\hline
+				\end{tabular}
+			\end{center}
+		\end{table}
+	
+		\begin{table}[h]
+			\caption{Распределение Пуассона}
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|c|}
+					\hline
+					& \multicolumn{2}{c|}{$n=10$} & \multicolumn{2}{c|}{$n=100$} & \multicolumn{2}{c|}{$n=1000$}\\
+					\hline
+					& $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$\\
+					\hline
+					$\overline{x}$ & $10.0186$ & $1.0132$ & $10.0020$ & $0.0976$ & $9.9942$ & $0.0098$\\
+					\hline
+					$med\;x$ & $9.8795$ & $1.4617$ & $9.8555$ & $0.1944$ & $9.9950$ & $0.0050$\\
+					\hline
+					$z_R$ & $10.3620$ & $1.9290$ & $10.9490$ & $1.0299$ & $11.6715$ & $0.6673$\\
+					\hline
+					$z_Q$ & $9.9170$ & $1.2086$ & $9.8725$ & $0.1590$ & $9.9945$ & $0.0037$\\
+					\hline
+					$z_{tr}$ & $9.8952$ & $1.1459$ & $9.8610$ & $0.1166$ & $9.8538$ & $0.0107$\\
+					\hline
+				\end{tabular}
+			\end{center}
+		\end{table}
+	
+		\begin{table}[h]
+			\caption{Равномерное распределение}
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|c|}
+					\hline
+					& \multicolumn{2}{c|}{$n=10$} & \multicolumn{2}{c|}{$n=100$} & \multicolumn{2}{c|}{$n=1000$}\\
+					\hline
+					& $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$\\
+					\hline
+					$\overline{x}$ & $-0.0202$ & $0.0893$ & $0.0003$ & $0.0099$ & $0.0011$ & $0.0010$\\
+					\hline
+					$med\;x$ & $-0.0295$ & $0.2088$ & $0.0057$ & $0.0294$ & $0.0009$ & $0.0030$\\
+					\hline
+					$z_R$ & $-0.0096$ & $0.0392$ & $0.0002$ & $0.0006$ & $0.0001$ & $0.0000$\\
+					\hline
+					$z_Q$ & $-0.0202$ & $0.1282$ & $-0.0164$ & $0.0146$ & $-0.0006$ & $0.0014$\\
+					\hline
+					$z_{tr}$ & $-0.0230$ & $0.1479$ & $0.0021$ & $0.0200$ & $0.0011$ & $0.0019$\\
+					\hline
+				\end{tabular}
+			\end{center}
+		\end{table}
+	\end{center}
+
+	\section{Обсуждение}
+	Исходя из полученных результатов можно сделать следующие выводы:
+	\begin{itemize}
+		\item Дисперсия может гарантировать порядок точности среднего значения только до первого значащей цифры в дисперсии включительно. Поэтому есть необходимость проверки данных результатов на совпадение этой точности.
+		
+		\item При увеличении количества выборки гарантируемая точность будет возрастать.
+		
+		\item Предыдущие выводы касаются всех распределений, кроме распределения Коши. Так как оно имеет бесконечную дисперсию и, следовательно, никакой точности гарантировать не может.
+	\end{itemize}
+	
+	\section{Литература}
+	\begin{enumerate}
+		\item \label{Book_1} \textbf{Вероятностные разделы математики.} Учебник для бакалавров технических направлений.//Под ред. Максимова~Ю.Д. --- Спб.: «Иван Федоров», 2001. --- 592 c., илл.
+	\end{enumerate}
+
+	\section{Приложение}
+	\begin{enumerate}
+		\item Код лабораторной. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_2/Lab_2.ipynb}
+		
+		\item Код отчёта. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_2/Lab_report_2.tex}
+		
+	\end{enumerate}
+\end{document}
