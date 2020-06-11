@@ -1,0 +1,295 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{misccorr}
+
+\usepackage{graphicx}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.png,.jpg}
+
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+	\begin{titlepage}
+		\begin{center}			
+			Санкт-Петербургский политехнический университет\\
+			Петра Великого
+			\vspace{0.25cm}
+			
+			Институт прикладной математики и механики
+			
+			Кафедра «Прикладная математика»
+			\vfill
+			
+			\textbf{Отчёт\\
+				по лабораторной работе №4\\
+				по дисциплине\\
+				«Математическая статистика»}\\[5mm]
+			\bigskip
+		\end{center}
+		\vfill
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Выполнил студент:
+			\vspace{0.2cm}
+			
+			Кондратьев~Д.~А.\\
+			группа: 3630102/70301
+		\end{minipage}%
+		\bigskip
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Проверил:
+			\vspace{0.2cm}
+			
+			к.ф.-м.н., доцент\\
+			Баженов Александр Николаевич
+		\end{minipage}%
+		\vfill
+		
+		\begin{center}
+			Санкт-Петербург\\
+			2020 г.
+		\end{center}
+	\end{titlepage}
+	
+	
+	
+	\tableofcontents{}
+	\listoffigures
+	
+	\newpage
+	\section{Постановка задачи}
+	
+	Для 5-ти рапределений:
+	\begin{itemize}
+		\item Нормальное распределение $N(x,0,1)$;
+		\item Распределение Коши $C(x,0,1)$;
+		\item Распределение Лапласа $L( x,0,\frac{1}{\sqrt{2}})$;
+		\item Распределение Пуассона $P(k, 10)$;
+		\item Равномерное Распределение $U(x,-\sqrt{3}, \sqrt{3})$;
+	\end{itemize}
+	Сгенерировать выборки размером 20, 60 и 100 элементов. Построить на них эмпирические функции распределения и ядерные оценки плотности распределения на отрезке $[-4;4]$ для непрерывных распределений и на отрезке $[6;14]$ для распределения Пуассона.
+	
+	\section{Теория}
+	\subsection{Распределения}
+	\begin{itemize}
+		\item Нормальное распределение \begin{equation}\label{eqn:normal}
+		N(x,0,1) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}
+		\end{equation}
+		
+		\item Распределение Коши
+		\begin{equation}\label{eqn:cauchy}
+		C(x,0,1) = \frac{1}{\pi(1+x^2)}
+		\end{equation}
+		
+		\item Распределение Лапласа
+		\begin{equation}\label{eqn:laplace}
+		L\left( x,0,\frac{1}{\sqrt{2}}\right) = \frac{1}{\sqrt{2}}e^{-\sqrt{2}\vert x\vert}
+		\end{equation}
+		
+		\item Распределение Пуассона
+		\begin{equation}\label{eqn:poisson}
+		P(k,10) = \frac{10^k}{k!}e^{-10}
+		\end{equation}
+		
+		\item Равномерное Распределение
+		\begin{equation}\label{eqn:uniform}
+		U(x,-\sqrt{3}, \sqrt{3}) = 
+		\begin{cases}
+		\frac{1}{2\sqrt{3}} &\vert x\vert \leqslant \sqrt{3}\\
+		0 &\vert x\vert > \sqrt{3}
+		\end{cases}
+		\end{equation}
+	\end{itemize}
+	
+	\subsection{Эмпирическая функция распределения}
+	\subsubsection{Статистический ряд}
+		Статистическим рядом называется последовательность различных элементов выборки $z_1,z_2, ...,z_k$, расположенных в возрастающем порядке с указанием частот $n_1,n_2, ...,n_k$, с которыми эти элементы содержатся в выборке. Статистический ряд обычно записывается в виде таблицы:
+		\begin{center}
+			\begin{table}[h]
+				\begin{center}
+					\begin{tabular}{|c|c|c|c|c|}
+						\hline
+						$z$ & $z_1$ & $z_2$ & ... & $z_k$\\
+						\hline
+						$n$ & $n_1$ & $n_2$ & ... & $n_k$\\
+						\hline
+					\end{tabular}
+				\end{center}
+			\caption{Статистический ряд}
+			\end{table}
+		\end{center}
+	
+	\subsubsection{Определение}
+		Эмпирической (выборочной) функцией распределения (э.~ф.~р.) называется относительная частота события $X < x$, полученная по данной выборке:
+		\begin{equation}\label{eqn:edf_prob}
+			F^*_n(x) = P^*(X < x)
+		\end{equation}
+		
+	\subsubsection{Описание}
+		Для получения относительной частоты $P^*(X < x)$ просуммируем в статистическом ряде, построенном по данной выборке, все частоты $n_i$, для которых элементы $z_i$ статистического ряда меньше $x$.\\ Тогда $P^*(X<x) = \frac{1}{n}\sum_{z_i < x}n_i$. Получаем
+		\begin{equation}\label{eqn:edf_sum}
+			F^*(x) = \frac{1}{n}\sum_{z_i < x}n_i
+		\end{equation}
+		$F^*(x)$ ---  функция распределения дискретной случайной величины X*, заданной таблицей распределения:
+		\begin{center}
+			\begin{table}[h]
+				\begin{center}
+					\begin{tabular}{|c|c|c|c|c|}
+						\hline
+						$z$ & $z_1$ & $z_2$ & ... & $z_k$\\
+						\hline
+						$n$ & $n_1$ & $n_2$ & ... & $n_k$\\
+						\hline
+					\end{tabular}
+				\end{center}
+				\caption{Таблица распределения}
+			\end{table}
+		\end{center}
+		Эмпирическая функция распределения является оценкой, т. е. приближённым значением, генеральной функции распределения:
+		\begin{equation}\label{eqn:edf_approx}
+		F^*_n(x) \approx F_X(x).
+		\end{equation}
+	
+	\subsection{Оценки плотности вероятности}
+	\subsubsection{Определение}
+		Оценкой плотности вероятности $f(x)$ называется функция $\hat{f}(x)$, построенная на основе выборки, приближённо равная $f(x)$:
+		\begin{equation}\label{eqn:pdf_approx}
+			\hat{f}(x) \approx f(x).
+		\end{equation}
+	\subsubsection{Ядерные оценки}
+		Представим оценку в виде суммы с числом слагаемых, равным объёму выборки:
+		\begin{equation}\label{eqn:pdf_sum}
+			\hat{f}(x) = \frac{1}{nh_n}\sum_{i=1}^{n}K(\frac{x-x_i}{h_n}).
+		\end{equation}
+		Здесь функция $K(u)$, называемая ядерной (ядром), непрерывна и является плотностью вероятности, $x_1, ... ,x_n$ --- элементы выборки, ${h_n}$ --- любая последовательность положительных чисел, обладающая свойствами:
+		\begin{equation}\label{eqn:h cond}
+			h_n \xrightarrow[n\rightarrow\infty]{}0; \quad \frac{h_n}{n^{-1}}\xrightarrow[n\rightarrow\infty]{}\infty.
+		\end{equation}
+		Такие оценки называются непрерывными ядерными [\ref{Book_1}, с. 421-423].
+		
+		Замечание. Свойство, означающее сближение оценки с оцениваемой величиной при $n\rightarrow\infty$ в каком-либо смысле, называется состоятельностью оценки. 
+		
+		Если плотность $f(x)$ кусочно-непрерывная, то ядерная оценка плотности является состоятельной при соблюдении условий, накладываемых на параметр сглаживания $h_n$, а также на ядро $K(u)$.
+		
+		Гауссово (нормальное) ядро [\ref{Book_2}, с. 38]:
+		\begin{equation}\label{eqn:Kernel fun}
+			K(u)=\frac{1}{\sqrt{2\pi}}e^{-\frac{u^2}{2}}.
+		\end{equation}
+		
+		Правило Сильвермана [\ref{Book_2}, с. 44]:
+		\begin{equation}\label{eqn:Silverman rule}
+		h_n = 1.06\hat{\sigma}n^{-1/5},
+		\end{equation}
+		где $\hat{\sigma}$ --- выборочное стандартное отклонение.
+	\section{Реализация}
+		Лабораторная работа выполнена на программном языке \emph{Python\;3.8} в среде разработки \emph{Jupyter Notebook\;6.0.3}. В работе использовались следующие пакеты языка \emph{Python}:
+		\begin{itemize}
+			\item \emph{numpy} --- для генерации выборки и работы с массивами;
+			
+			\item \emph{matplotlib.pyplot} и \emph{seaborn} --- для построения графиков;
+			
+			\item \emph{scipy.stats} --- содержит все необходимые распределения.
+		\end{itemize}
+		Ссылка на исходный код лабораторной работы приведена в приложении.
+
+	\section{Результаты}
+	\subsection{Эмпирическая функция распределения}
+	\begin{center}
+		\begin{figure}[h!]
+			\includegraphics[width=\textwidth]{"Normal distribution (edf)"} 
+			\caption[Нормальное распределение]{Нормальное распределение}
+		\end{figure}
+		
+		\begin{figure}[h!]
+			\includegraphics[width=\textwidth]{"Cauchy distribution (edf)"}
+			\caption[Распределение Коши]{Распределение Коши}
+		\end{figure}
+	
+		\begin{figure}[h!]
+			\includegraphics[width=\textwidth]{"Laplace distribution (edf)"}
+			\caption[Распределение Лапласа]{Распределение Лапласа}
+		\end{figure}
+		
+		\begin{figure}[h!]
+			\includegraphics[width=\textwidth]{"Poisson distribution (edf)"}
+			\caption[Распределение Пуассона]{Распределение Пуассона}
+		\end{figure}
+	
+		\begin{figure}[h!]			
+			\includegraphics[width=\textwidth]{"Uniform distribution (edf)"}
+			\caption[Равномерное распределение]{Равномерное распределение}
+		\end{figure}
+	\end{center}
+	
+	\newpage
+	\subsection{Ядерные оценки плотности распределения}
+	\begin{center}
+		\begin{figure}[hp!]
+			\includegraphics[width=\textwidth]{"Normal distribution (kernel)"} 
+			\caption[Нормальное распределение]{Нормальное распределение}
+		\end{figure}
+		
+		\begin{figure}[hp!]
+			\includegraphics[width=\textwidth]{"Cauchy distribution (kernel)"}
+			\caption[Распределение Коши]{Распределение Коши}
+		\end{figure}
+		
+		\begin{figure}[hp!]
+			\includegraphics[width=\textwidth]{"Laplace distribution (kernel)"}
+			\caption[Распределение Лапласа]{Распределение Лапласа}
+		\end{figure}
+		
+		\begin{figure}[hp!]
+			\includegraphics[width=\textwidth]{"Poisson distribution (kernel)"}
+			\caption[Распределение Пуассона]{Распределение Пуассона}
+		\end{figure}
+		
+		\begin{figure}[hp!]			
+			\includegraphics[width=\textwidth]{"Uniform distribution (kernel)"}
+			\caption[Равномерное распределение]{Равномерное распределение}
+		\end{figure}
+	\end{center}
+
+	\newpage
+	\section{Обсуждение}
+	Исходя из полученных результатов можно сделать следующие выводы:
+	\begin{itemize}
+		\item При увеличении размера выборки  качество оценки эмперической функцией эталонной функции распределения возрастает.
+		
+		\item При увеличении размера выборки  качество ядерной оценки плотности распределения возрастает.
+		
+		\item Наилучшее качество ядерной оценки плотности распределения достигается при следующих параметрах:
+		\begin{enumerate}
+			\item для нормального распределения --- $h=h_n$;
+			
+			\item для распределения Коши --- $h=h_n$;
+			
+			\item для распределения Лапласа --- $h=\frac{h_n}{2}$ или $h=h_n$;
+			
+			\item для распределения Пуассона --- $h=2h_n$;
+			
+			\item для равномерного распределения --- $h=\frac{h_n}{2}$ или $h=h_n$.
+		\end{enumerate}
+	\end{itemize}
+	
+	\section{Литература}
+	\begin{enumerate}
+		\item \label{Book_1} \textbf{Вероятностные разделы математики.} Учебник для бакалавров технических направлений.//Под ред. Максимова~Ю.Д. --- Спб.: «Иван Федоров», 2001. --- 592 c., илл.
+		
+		\item \label{Book_2} Анатольев, Станислав (2009) «Непараметрическая регрессия», Квантиль, №7, стр. 37-52.
+		
+		\item Kernel density estimation. URL: \url{https://en.wikipedia.org/wiki/Kernel_density_estimation}
+	\end{enumerate}
+
+	\section{Приложение}
+	\begin{enumerate}
+		\item Код лабораторной. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_4/Lab_4.ipynb}
+		
+		\item Код отчёта. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_4/Lab_report_4.tex}
+		
+	\end{enumerate}
+\end{document}
