@@ -74,7 +74,15 @@
 	\end{itemize}
 	Сгенерировать выборки размером 20 и 100 элементов. Построить для них боксплот Тьюки.
 	
-	Для каждого распределения определить долю выбросов экспериментально (сгенерировав выборку, соответствующую распределению 1000 раз, и вычислив среднюю долю выбросов) и сравнить с результатами, полученными теоретически.
+	Для каждого распределения определить долю выбросов экспериментально (сгенерировав выборку, соответствующую распределению 1000 раз, и вычислив среднюю долю выбросов и их дисперсии) и сравнить с результатами, полученными теоретически.\\
+	Средняя доля выбросов:
+	\begin{equation}\label{eqn:expected_value}
+		E(z)=\overline{z}
+	\end{equation}
+	Дисперсия:
+	\begin{equation}\label{eqn:variance}
+		D(z)=\overline{z^2}-\overline{z}^2
+	\end{equation}
 	
 	\section{Теория}
 	\subsection{Распределения}
@@ -161,24 +169,52 @@
 	Ссылка на исходный код лабораторной работы приведена в приложении.
 
 	\section{Результаты}
+	\subsection{Боксплот Тьюки}
+	\begin{center}
+		\begin{figure}[hp!]
+			\includegraphics[width=\textwidth]{"Normal distribution"} 
+			\caption[Нормальное распределение]{Нормальное распределение}
+			
+			\includegraphics[width=\textwidth]{"Cauchy distribution"}
+			\caption[Распределение Коши]{Распределение Коши}
+		\end{figure}
+		
+		\begin{figure}[hp!]
+			\includegraphics[width=\textwidth]{"Laplace distribution"}
+			\caption[Распределение Лапласа]{Распределение Лапласа}
+			
+			\includegraphics[width=\textwidth]{"Poisson distribution"}
+			\caption[Распределение Пуассона]{Распределение Пуассона}
+		\end{figure}
+	
+		\begin{figure}[h!]
+			\includegraphics[width=\textwidth]{"Uniform distribution"}
+			\caption[Равномерное распределение]{Равномерное распределение}
+		\end{figure}
+	\end{center}
+	
+	\newpage
 	\subsection{Доля выбросов}
 	\begin{center}
 		\begin{table}[h]
 			\caption{Доля выбросов}
 			\begin{center}
-				\begin{tabular}{|c|c|c|}
+				\begin{tabular}{|c|c|c|c|c|}
 					\hline
-					Распределение & $n=20$ & $n=100$\\
+					& \multicolumn{2}{c|}{$n=20$} & \multicolumn{2}{c|}{$n=100$}\\
+					\cline{2-5}
+					\raisebox{1.5ex}[0cm][0cm]{Распределение}
+					& $E$ (\ref{eqn:expected_value}) & $D$ (\ref{eqn:variance}) & $E$ & $D$\\
 					\hline
-					Нормальное распределение & $0.0239$ & $0.0101$\\
+					Нормальное распределение & $0.024$ & $0.0019$ & $0.0101$ & $0.0002$ \\
 					\hline
-					Распределение Коши & $0.1516$ & $0.1544$\\
+					Распределение Коши & $0.152$ & $0.0049$ & $0.154$ & $0.0011$\\
 					\hline
-					Распределение Лапласа & $0.0739$ & $0.0632$\\
+					Распределение Лапласа & $0.074$ & $0.0044$ & $0.0632$ & $0.0009$\\
 					\hline
-					Распределение Пуассона & $0.0242$ & $0.0105$\\
+					Распределение Пуассона & $0.024$ & $0.0022$ & $0.0105$ & $0.0002$\\
 					\hline
-					Равномерное распределение & $0.0020$ & $0.0$\\
+					Равномерное распределение & $0.0020$ & $0.0002$ & $0.0$ & $0.0$\\
 					\hline
 				\end{tabular}
 			\end{center}
@@ -208,32 +244,6 @@
 				\end{tabular}
 			\end{center}
 		\end{table}
-	\end{center}
-
-	\subsection{Боксплот Тьюки}
-	\begin{center}
-		\begin{figure}[h!]
-			\includegraphics[width=\textwidth]{"Normal distribution"} 
-			\caption[Нормальное распределение]{Нормальное распределение}
-		\end{figure}
-		
-		\newpage
-		\begin{figure}[h!]
-			\includegraphics[width=\textwidth]{"Cauchy distribution"}
-			\caption[Распределение Коши]{Распределение Коши}
-			
-			\includegraphics[width=\textwidth]{"Laplace distribution"}
-			\caption[Распределение Лапласа]{Распределение Лапласа}
-		\end{figure}
-		
-		\newpage
-		\begin{figure}[h!]
-			\includegraphics[width=\textwidth]{"Poisson distribution"}
-			\caption[Распределение Пуассона]{Распределение Пуассона}
-			
-			\includegraphics[width=\textwidth]{"Uniform distribution"}
-			\caption[Равномерное распределение]{Равномерное распределение}
-		\end{figure}
 	\end{center}
 
 	\section{Обсуждение}
