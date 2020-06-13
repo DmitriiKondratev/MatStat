@@ -1,0 +1,204 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{misccorr}
+
+\usepackage{graphicx}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.png,.jpg}
+
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+	\begin{titlepage}
+		\begin{center}			
+			Санкт-Петербургский политехнический университет\\
+			Петра Великого
+			\vspace{0.25cm}
+			
+			Институт прикладной математики и механики
+			
+			Кафедра «Прикладная математика»
+			\vfill
+			
+			\textbf{Отчёт\\
+				по лабораторной работе №6\\
+				по дисциплине\\
+				«Математическая статистика»}\\[5mm]
+			\bigskip
+		\end{center}
+		\vfill
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Выполнил студент:
+			\vspace{0.2cm}
+			
+			Кондратьев~Д.~А.\\
+			группа: 3630102/70301
+		\end{minipage}%
+		\bigskip
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Проверил:
+			\vspace{0.2cm}
+			
+			к.ф.-м.н., доцент\\
+			Баженов Александр Николаевич
+		\end{minipage}%
+		\vfill
+		
+		\begin{center}
+			Санкт-Петербург\\
+			2020 г.
+		\end{center}
+	\end{titlepage}
+	
+	
+	
+	\tableofcontents{}
+	\listoffigures
+	\listoftables
+	
+	\newpage
+	\section{Постановка задачи}
+	
+	Найти оценки коэффициентов линейной регрессии $y_i = a + bx_i + e_i$, используя 20 точек на отрезке $[-1.8; 2]$ с равномерным шагом равным $0.2$. Ошибку $e_i$ считать нормально распределённой с параметрами $(0, 1)$. В качестве эталонной зависимости взять $y_i = 2 + 2x_i + e_i$. При построении оценок коэффициентов использовать два критерия: критерий наименьших квадратов и критерий наименьших модулей.
+	
+	Проделать то же самое для выборки, у которой в значения $y_1$ и $y_{20}$ вносятся возмущения $10$ и $-10$.
+	
+	\section{Теория}
+	\subsection{Простая линейная регрессия}
+	\subsubsection{Модель простой линейной регрессии}
+	Регрессионную модель описания данных называют \emph{простой линейной регрессией}, если
+	\begin{equation}\label{eqn:linear_regression}
+	y_i = \beta_0 + \beta_1x_i + \varepsilon_i, \quad i = 1, ... , n,
+	\end{equation}
+	где $x_1$, ... , $x_n$ --- заданные числа (значения фактора);\\
+	$y_1$, ... , $y_n$ --- наблюдаемые значения отклика;\\ $\varepsilon_1$, ... , $\varepsilon_n$ — независимые, нормально распределённые N(0, $\sigma$) с нулевым математическим ожиданием и одинаковой (неизвестной) дисперсией случайные величины (ненаблюдаемые);\\ $\beta_0, \beta_1$ — неизвестные параметры, подлежащие оцениванию.
+	
+	В модели (\ref{eqn:linear_regression}) отклик $y$ зависит зависит от одного фактора $x$, и весь разброс экспериментальных точек объясняется только погрешностями наблюдений (результатов измерений) отклика $y$. Погрешности результатов измерений $x$ в этой модели полагают существенно меньшими погрешностей результатов измерений $y$, так что ими можно пренебречь [\ref{Book_1},~с.~507].
+	
+	\subsection{Метод наименьших квадратов}
+	При оценивании параметров регрессионной модели используют различные методы. Один из наиболее распрстранённых подходов заключается в следующем: вводится мера (критерий) рассогласования отклика и регрессионной функции, и оценки параметров регрессии определяются так, чтобы сделать это рассогласование наименьшим. Достаточно простые расчётные формулы для оценок получают при выборе критерия в виде суммы квадратов отклонений значений отклика от значений регрессионной функции (сумма квадратов остатков):
+	\begin{equation}\label{eqn:least_squares}
+	Q(\beta_0, \beta_1) = \sum_{i = 1}^{n} \varepsilon^2_i = \sum_{i = 1}^{n} (y_i - \beta_0 - \beta_1 x_i)^2 \rightarrow \min_{\beta_0, \beta_1}.
+	\end{equation}
+	Задача минимизации квадратичного критерия (\ref{eqn:least_squares}) носит название задачи \emph{метода наименьших квадратов} (МНК), а оценки $\hat{\beta_0}$, $\hat{\beta_1}$ параметров $\beta_0$, $\beta_1$, реализующие минимум критерия (\ref{eqn:least_squares}), называют МНК-\emph{оценками} [\ref{Book_1},~с.~508].
+	
+	\subsubsection{Расчётные формулы для МНК-оценок}
+	МНК-оценки параметров $\hat{\beta_0}$ и $\hat{\beta_1}$ находятся из условия обращения функции Q($\beta_0$, $\beta_1$) в минимум.
+		
+	Для нахождения МНК-оценок $\hat{\beta_0}$ и $\hat{\beta_1}$ выпишем необходимые условия экстремума:
+	
+	
+	\begin{equation}\label{eqn:extremum_cond}
+	\begin{cases}
+	\frac{\partial Q}{\partial \beta_0} = -2 \sum_{i = 1}^{n} (y_i - \beta_0 - \beta_1 x_i) = 0,\\
+	\frac{\partial Q}{\partial \beta_1} = -2 \sum_{i = 1}^{n} (y_i - \beta_0 - \beta_1 x_i)x_i = 0
+	\end{cases}
+	\end{equation}
+	Далее для упрощения записи сумм будем опускать индекс суммирования. Из системы (\ref{eqn:extremum_cond}) получим
+	
+	\begin{equation}\label{eqn:extremum_cond_2}
+	\begin{cases}
+	n\hat{\beta_0} + \hat{\beta_1} \sum x_i = \sum y_i\\
+	\hat{\beta_0}\sum x_i + \hat{\beta_1} \sum x^2_i = \sum x_i y_i
+	\end{cases}
+	\end{equation}
+	Разделим оба уравнения на $n$ и используя известные статистические обозначения для выборочных первых и вторых начальных моментов
+	$$\overline{x} = \frac{1}{n} \sum x_i,\; \overline{y} = \frac{1}{n} \sum y_i,\; \overline{x^2} = \frac{1}{n} \sum x^2_i,\; \overline{xy} = \frac{1}{n} \sum x_iy_i,$$
+	получим
+	\begin{equation}\label{eqn:extremum_cond_3}
+	\begin{cases}
+	\hat{\beta_0} + \hat{\beta_1}\overline{x} = \overline{y}\\
+	\hat{\beta_0}\overline{x} + \hat{\beta_1} \overline{x^2} = \overline{xy}
+	\end{cases}
+	\end{equation}	
+	откуда МНК-оценку $\hat{\beta_1}$ наклона прямой регрессии находим по формуле
+	Крамера
+	\begin{equation}\label{eqn:beta_1}
+	\hat{\beta_1} = \frac{\overline{xy} - \overline{x} \cdot \overline{y}}{\overline{x^2} - {\overline{x}}^2}
+	\end{equation}
+	а МНК-оценку $\hat{\beta_0}$ определяем непосредственно из первого уравнения системы (\ref{eqn:extremum_cond_3}):
+	\begin{equation}\label{eqn:beta_0}
+	\hat{\beta_0} = \overline{y} - \overline{x}\hat{\beta_1}
+	\end{equation}
+	
+	\subsection{Метод наименьших модулей}
+	Критерий наименьших модулей --- заключается в минимизации следующей функции:
+	\begin{equation} \label{least_abs}
+	M(a,b) = \sum\limits_{i=1}^n\vert y_i-ax_i-b\vert\to\min
+	\end{equation}
+	
+	\section{Реализация}
+		Лабораторная работа выполнена на программном языке \emph{Python\;3.8} в среде разработки \emph{Jupyter Notebook\;6.0.3}. В работе использовались следующие пакеты языка \emph{Python}:
+		\begin{itemize}
+			\item \emph{numpy} --- для генерации выборки и работы с массивами;
+			
+			\item \emph{matplotlib.pyplot} и \emph{seaborn} --- для построения графиков;
+			
+			\item \emph{scipy.optimize} --- для решения задач оптимизации;
+		\end{itemize}
+		Ссылка на исходный код лабораторной работы приведена в приложении.
+		
+	\section{Результаты}
+	\subsection{Оценки коэффициентов линейной регрессии}
+	\begin{center}
+		\begin{table}[h!]
+			\begin{center}
+				\begin{tabular}{|c|c|c|}
+					\multicolumn{3}{c}{Выборка без возмущений} \\
+					\hline
+					Критерий & $a$ & $b$\\
+					\hline
+					МНК & $1.502$ & $1.878$\\
+					\hline
+					МНМ & $1.709$ & $1.563$\\
+					\hline
+					\multicolumn{3}{c}{ } \\
+					\multicolumn{3}{c}{Выборка c возмущениями} \\
+					\hline
+					Критерий & $a$ & $b$\\
+					\hline
+					МНК & $0.394$ & $1.895$\\
+					\hline
+					МНМ & $1.457$ & $1.564$\\
+					\hline					
+				\end{tabular}
+				\caption{Оценки коэффициентов линейной регрессии}
+			\end{center}
+		\end{table}
+		
+		\begin{figure}[h!]
+			\includegraphics[width=\textwidth]{"Linear_regression"} 
+			\caption[Линейная регрессия]{Линейная регрессия}
+		\end{figure}
+	\end{center}
+
+	\newpage
+	\section{Обсуждение}
+	Исходя из полученных результатов можно сделать следующие выводы:
+	\begin{itemize}		
+		\item Критерий наименьших модулей точнее оценивает коэффициенты линейной регрессии на выборке с возмущениями.
+		
+		\item Критерий наименьших модулей устойчив к редким выбросам по сравнению с критерием наименьших квадратов. Но при этом обладает большей вычислительной сложностью из-за необходимости решения задачи минимизации.
+	\end{itemize}
+	
+	\section{Литература}
+	\begin{enumerate}
+		\item \label{Book_1} \textbf{Вероятностные разделы математики.} Учебник для бакалавров технических направлений.//Под ред. Максимова~Ю.Д. --- Спб.: «Иван Федоров», 2001. --- 592 c., илл.
+		
+		\item Least squares. URL: \url{https://en.wikipedia.org/wiki/Least_squares}
+		
+		\item Least absolute deviations. URL: \url{https://en.wikipedia.org/wiki/Least_absolute_deviations}
+	\end{enumerate}
+
+	\section{Приложение}
+	\begin{enumerate}
+		\item Код лабораторной. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_6/Lab_6.ipynb}
+		
+		\item Код отчёта. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_6/Lab_report_6.tex}
+	\end{enumerate}
+\end{document}
