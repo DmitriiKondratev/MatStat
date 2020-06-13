@@ -1,0 +1,697 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{misccorr}
+
+
+\usepackage{graphicx}%,vmargin}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.png,.jpg}
+
+\usepackage{mathrsfs}
+\usepackage{amsmath,amsthm}
+\usepackage{hyperref}
+\usepackage{float}
+
+\begin{document}
+	\begin{titlepage}
+		\begin{center}			
+			Санкт-Петербургский политехнический университет\\
+			Петра Великого
+			\vspace{0.25cm}
+			
+			Институт прикладной математики и механики
+			
+			Кафедра «Прикладная математика»
+			\vfill
+			
+			\textbf{Отчёт\\
+				по лабораторным работам №1-4\\
+				по дисциплине\\
+				«Математическая статистика»}\\[5mm]
+			\bigskip
+		\end{center}
+		\vfill
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Выполнил студент:
+			\vspace{0.2cm}
+			
+			Кондратьев~Д.~А.\\
+			группа: 3630102/70301
+		\end{minipage}%
+		\bigskip
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Проверил:
+			\vspace{0.2cm}
+			
+			к.ф.-м.н., доцент\\
+			Баженов Александр Николаевич
+		\end{minipage}%
+		\vfill
+		
+		\begin{center}
+			Санкт-Петербург\\
+			2020 г.
+		\end{center}
+	\end{titlepage}
+	
+\tableofcontents{}
+\newpage
+\listoffigures
+\listoftables
+\newpage
+
+\section{Постановка задачи}
+	Для 5-ти рапределений:
+	\begin{itemize}
+		\item Нормальное распределение $N(x,0,1)$;
+		\item Распределение Коши $C(x,0,1)$;
+		\item Распределение Лапласа $L( x,0,\frac{1}{\sqrt{2}})$;
+		\item Распределение Пуассона $P(k, 10)$;
+		\item Равномерное Распределение $U(x,-\sqrt{3}, \sqrt{3})$;
+	\end{itemize}
+
+	\begin{enumerate}
+		\item Сгенерировать выборки размером 10, 50 и 1000 элементов. Построить на одном рисунке гистограмму и график плотности распределения.
+		
+		\item Сгенерировать выборки размером 10, 100 и 1000 элементов. Для каждой выборки вычислить следующие статистические характеристики положения данных: $\overline{x}, med\;x, z_R, z_Q, z_{tr}$. Повторить такие вычисления 1000 раз для каждой выборки и найти среднее характеристик положения и их квадратов:
+		\begin{equation}\label{eqn:expected_value}
+		E(z)=\overline{z}
+		\end{equation}
+		Вычислить оценку дисперсии по формуле:
+		\begin{equation}\label{eqn:variance}
+		D(z)=\overline{z^2}-\overline{z}^2
+		\end{equation}
+		Представить полученные данные в виде таблиц.
+		
+		\item Сгенерировать выборки размером 20 и 100 элементов. Построить для них боксплот Тьюки. Для каждого распределения определить долю выбросов экспериментально (сгенерировав выборку, соответствующую распределению 1000 раз, и вычислив среднюю долю выбросов и их дисперсии) и сравнить с результатами, полученными теоретически.
+		
+		\item Сгенерировать выборки размером 20, 60 и 100 элементов. Построить на них эмпирические функции распределения и ядерные оценки плотности распределения на отрезке $[-4;4]$ для непрерывных распределений и на отрезке $[6;14]$ для распределения Пуассона.
+	\end{enumerate}
+	
+\section{Теория}
+	\subsection{Распределения}
+	\begin{itemize}
+		\item Нормальное распределение \begin{equation}\label{eqn:normal}
+		N(x,0,1) = \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}
+		\end{equation}
+		
+		\item Распределение Коши
+		\begin{equation}\label{eqn:cauchy}
+		C(x,0,1) = \frac{1}{\pi(1+x^2)}
+		\end{equation}
+		
+		\item Распределение Лапласа
+		\begin{equation}\label{eqn:laplace}
+		L\left( x,0,\frac{1}{\sqrt{2}}\right) = \frac{1}{\sqrt{2}}e^{-\sqrt{2}\vert x\vert}
+		\end{equation}
+		
+		\item Распределение Пуассона
+		\begin{equation}\label{eqn:poisson}
+		P(k,10) = \frac{10^k}{k!}e^{-10}
+		\end{equation}
+		
+		\item Равномерное Распределение
+		\begin{equation}\label{eqn:uniform}
+		U(x,-\sqrt{3}, \sqrt{3}) = 
+		\begin{cases}
+		\frac{1}{2\sqrt{3}} &\vert x\vert \leqslant \sqrt{3}\\
+		0 &\vert x\vert > \sqrt{3}
+		\end{cases}
+		\end{equation}
+	\end{itemize}
+
+	\subsection{Гистограмма}
+		\subsubsection{Определение}
+			Гистограмма в математической статистике --- это функция, приближающая
+			плотность вероятности некоторого распределения, построенная на основе
+			выборки из него [\ref{Histogram}].
+
+		\subsubsection{Графическое описание}
+			Графически гистограмма строится следующим образом. Сначала множество значений, которое может принимать элемент выборки, разбивается на
+			несколько интервалов. Чаще всего эти интервалы берут одинаковыми, но
+			это не является строгим требованием. Эти интервалы откладываются на
+			горизонтальной оси, затем над каждым рисуется прямоугольник. Если все
+			интервалы были одинаковыми, то высота каждого прямоугольника пропорциональна числу элементов выборки, попадающих в соответствующий
+			интервал. Если интервалы разные, то высота прямоугольника выбирается
+			таким образом, чтобы его площадь была пропорциональна числу элементов
+			выборки, которые попали в этот интервал [\ref{Histogram}].
+
+		\subsubsection{Использование}
+			Гистограммы применяются в основном для визуализации данных на начальном этапе статистической обработки.
+			
+			Построение гистограмм используется для получения эмпирической оценки плотности распределения случайной величины. Для построения гистограммы наблюдаемый диапазон изменения случайной величины разбивается на несколько интервалов и подсчитывается доля от всех измерений, попавшая в каждый из интервалов. Величина каждой доли, отнесенная к величине интервала, принимается в качестве оценки значения плотности распределения на соответствующем интервале [\ref{Histogram}].
+		
+	\subsection{Вариационный ряд}
+		Вариационным рядом называется последовательность элементов выборки, расположенных в неубывающем порядке. Одинаковые элементы повторяются  [\ref{Book_1}, с. 409].
+		
+		Запись вариационного ряда: $x_1, x_2, ... , x_n$.
+		
+		Элементы вариационного ряда $x_i\ (i = 1,2, ... ,n)$ называются порядковыми статистиками.
+	
+	\subsection{Выборочные числовые характеристики}
+		С помощью выборки образуются её числовые характеристики. Это числовые характеристики дискретной случайной величины $X^*$, принимающей выборочные значения $x_1, x_2, ... , x_n$ [\ref{Book_1}, с. 411].
+			
+		\subsubsection{Характеристики положения}
+			\begin{itemize}
+				\item Выборочное среднее:
+				\begin{equation}\label{eqn:average}
+				\overline{x} = \frac{1}{n}\sum_{i=1}^n x_i
+				\end{equation}
+				
+				\item Выборочная медиана:
+				\begin{equation}\label{eqn:med}
+				med\;x =
+				\begin{cases}
+				x_{k+1}, & n = 2k+1\\
+				\frac{1}{2}\left(x_k+x_{k+1}\right), & n = 2k
+				\end{cases}
+				\end{equation}
+				
+				\item Полусумма экстремальных выборочных элементов:
+				\begin{equation}\label{eqn:mean_extr}
+				z_R = \frac{1}{2}\left(x_1+x_n\right)
+				\end{equation}
+				
+				\item Полусумма квартилей:
+				\begin{equation}\label{eqn:quartiles}
+				z_Q = \frac{1}{2}\left(z_{\frac{1}{4}}+z_{\frac{3}{4}}\right) 
+				\end{equation}
+				
+				\item Усечённое среднее:
+				\begin{equation}\label{eqn:trim_mean}
+				z_{tr} = \frac{1}{n - 2r}\sum_{i=r+1}^{n-r} x_i,\ r\approx\frac{n}{4}
+				\end{equation}
+			\end{itemize}
+		
+			\subsubsection{Характеристики рассеяния}
+				Выборочная дисперсия:
+				\begin{equation}\label{eqn:var}
+				D = \frac{1}{n}\sum_{i=1}^n (x_i-\overline{x})^2
+				\end{equation}
+	\subsection{Боксплот Тьюки}
+		\subsubsection{Определение}
+			Боксплот (англ. box plot) --- график, использующийся в описательной статистике, компактно изображающий одномерное распределение вероятностей.
+		
+		\subsubsection{Описание}
+			Такой вид диаграммы в удобной форме показывает медиану, нижний и верхний квартили и выбросы. Несколько таких ящиков можно нарисовать бок о бок, чтобы визуально сравнивать одно распределение с другим; их можно располагать как горизонтально, так и вертикально. Расстояния между различными частями ящика позволяют определить степень разброса (дисперсии) и асимметрии данных и выявить выбросы [\ref{Box plot}].
+		
+		\subsubsection{Построение}
+			Границами ящика служат первый и третий квартили, линия в середине
+			ящика --- медиана. Концы усов — края статистически значимой выборки
+			(без выбросов). Длину «усов» определяют разность первого квартиля и полутора межквартильных расстояний и сумма третьего квартиля и полутора
+			межквартильных расстояний. Формула имеет вид:
+			\begin{equation}\label{eqn:box_plot}
+			X_1 = Q_1 - \frac{3}{2}(Q_3 - Q_1),\  X_2 = Q_3 + \frac{3}{2}(Q_3 - Q_1)
+			\end{equation}
+			где $X_1$ --- нижняя граница уса, $X_2$ --- верхняя граица уса, $Q_1$ --- первый квартиль, $Q_3$ --- третий квартиль.
+			
+			Данные, выходящие за границы усов (выбросы), отображаются на графике
+			в виде маленьких кружков.
+	
+	\subsection{Теоретическая вероятность выбросов}
+		Встроенными средствами языка программирования \emph{Python} можно вычислить теоретические первый и третий квартили распределений ($Q^T_1$ и $Q^T_3$ соответственно). По формуле (\ref{eqn:box_plot}) можно вычислить теоретические нижнюю и верхнюю границы уса ($X^T_1$ и $X^T_3$ соответственно). Выбросами считаются величины $x$, такие что:
+		\begin{equation}\label{eqn:outliers}
+		\left[ \begin{array}{l}
+		x < X^T_1 \\
+		x > X^T_3
+		\end{array} \right.
+		\end{equation}
+		Теоретическая вероятность выбросов для непрерывных распределений:
+		\begin{equation}\label{eqn:continous_prob}
+		P^T_{out} = P(x < X^T_1) + P(x > X^T_2) = F(X^T_1) + (1-F(X^T_2)),
+		\end{equation}
+		где $F(X) = P(x \leq X)$ --- функция распределения.
+		Теоретическая вероятность выбросов для дискретных распределений:
+		\begin{multline}\label{eqn:discrete_prob}
+		P^T_{out} = P(x < X^T_1) + P(x > X^T_2)=\\
+		= (F(X^T_1) - P(x = X^T_1)) + (1-F(X^T_2)),
+		\end{multline}
+		где $F(X) = P(x \leq X)$ --- функция распределения.
+		
+	\subsection{Эмпирическая функция распределения}
+		\subsubsection{Статистический ряд}
+			Статистическим рядом называется последовательность различных элементов выборки $z_1,z_2, ...,z_k$, расположенных в возрастающем порядке с указанием частот $n_1,n_2, ...,n_k$, с которыми эти элементы содержатся в выборке. Статистический ряд обычно записывается в виде таблицы:
+			\begin{table}[h]
+				\begin{center}
+					\begin{tabular}{|c|c|c|c|c|}
+						\hline
+						$z$ & $z_1$ & $z_2$ & ... & $z_k$\\
+						\hline
+						$n$ & $n_1$ & $n_2$ & ... & $n_k$\\
+						\hline
+					\end{tabular}
+				\end{center}
+				\caption{Статистический ряд}
+			\end{table}
+		
+		\subsubsection{Определение}
+			Эмпирической (выборочной) функцией распределения (э.~ф.~р.) называется относительная частота события $X < x$, полученная по данной выборке:
+			\begin{equation}\label{eqn:edf_prob}
+			F^*_n(x) = P^*(X < x)
+			\end{equation}
+		
+		\subsubsection{Описание}
+			Для получения относительной частоты $P^*(X < x)$ просуммируем в статистическом ряде, построенном по данной выборке, все частоты $n_i$, для которых элементы $z_i$ статистического ряда меньше $x$.\\ Тогда $P^*(X<x) = \frac{1}{n}\sum_{z_i < x}n_i$. Получаем
+			\begin{equation}\label{eqn:edf_sum}
+			F^*(x) = \frac{1}{n}\sum_{z_i < x}n_i
+			\end{equation}
+			$F^*(x)$ ---  функция распределения дискретной случайной величины X*, заданной таблицей распределения:
+			\begin{table}[h]
+				\begin{center}
+					\begin{tabular}{|c|c|c|c|c|}
+						\hline
+						$X^*$ & $z_1$ & $z_2$ & ... & $z_k$\\
+						\hline
+						$P$ & $\frac{n_1}{n}$ & $\frac{n_2}{n}$ & ... & $\frac{n_k}{n}$\\
+						\hline
+					\end{tabular}
+				\end{center}
+				\caption{Таблица распределения}
+			\end{table}
+			Эмпирическая функция распределения является оценкой, т. е. приближённым значением, генеральной функции распределения:
+			\begin{equation}\label{eqn:edf_approx}
+			F^*_n(x) \approx F_X(x).
+			\end{equation}
+		
+	\subsection{Оценки плотности вероятности}
+		\subsubsection{Определение}
+			Оценкой плотности вероятности $f(x)$ называется функция $\hat{f}(x)$, построенная на основе выборки, приближённо равная $f(x)$:
+			\begin{equation}\label{eqn:pdf_approx}
+			\hat{f}(x) \approx f(x).
+			\end{equation}
+		
+		\subsubsection{Ядерные оценки}
+			Представим оценку в виде суммы с числом слагаемых, равным объёму выборки:
+			\begin{equation}\label{eqn:pdf_sum}
+			\hat{f}(x) = \frac{1}{nh_n}\sum_{i=1}^{n}K(\frac{x-x_i}{h_n}).
+			\end{equation}
+			Здесь функция $K(u)$, называемая ядерной (ядром), непрерывна и является плотностью вероятности, $x_1, ... ,x_n$ --- элементы выборки, ${h_n}$ --- любая последовательность положительных чисел, обладающая свойствами:
+			\begin{equation}\label{eqn:h cond}
+			h_n \xrightarrow[n\rightarrow\infty]{}0; \quad \frac{h_n}{n^{-1}}\xrightarrow[n\rightarrow\infty]{}\infty.
+			\end{equation}
+			Такие оценки называются непрерывными ядерными [\ref{Book_1}, с. 421-423].
+			
+			Замечание. Свойство, означающее сближение оценки с оцениваемой величиной при $n\rightarrow\infty$ в каком-либо смысле, называется состоятельностью оценки. 
+			
+			Если плотность $f(x)$ кусочно-непрерывная, то ядерная оценка плотности является состоятельной при соблюдении условий, накладываемых на параметр сглаживания $h_n$, а также на ядро $K(u)$.
+			
+			Гауссово (нормальное) ядро [\ref{Book_2}, с. 38]:
+			\begin{equation}\label{eqn:Kernel fun}
+			K(u)=\frac{1}{\sqrt{2\pi}}e^{-\frac{u^2}{2}}.
+			\end{equation}
+			
+			Правило Сильвермана [\ref{Book_2}, с. 44]:
+			\begin{equation}\label{eqn:Silverman rule}
+			h_n = 1.06\hat{\sigma}n^{-1/5},
+			\end{equation}
+			где $\hat{\sigma}$ --- выборочное стандартное отклонение.
+		
+		
+		
+\section{Реализация}
+	Лабораторная работа выполнена на программном языке \emph{Python\;3.8} в среде разработки \emph{Jupyter Notebook\;6.0.3}. В работе использовались следующие пакеты языка \emph{Python}:
+	\begin{itemize}
+		\item \emph{numpy} --- для генерации выборки и работы с массивами;
+		
+		\item \emph{matplotlib.pyplot  и seaborn} --- для построения графиков, гистрограмм и боксплотов Тьюки;
+		
+		\item \emph{scipy.stats} --- содержит все необходимые распределения, а также именно с помощью него можно получить теоретические оценки.
+	\end{itemize}
+	Ссылка на исходный код лабораторной работы приведена в приложении.
+	
+\section{Результаты}
+	\subsection{Гистограмма и график плотности распределения}
+		\begin{center}
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{"../Lab_1/pictures/Normal distribution"} 
+			\caption[Нормальное распределение]{Нормальное распределение}
+		\end{figure}
+		
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{"../Lab_1/pictures/Cauchy distribution"}
+			\caption[Распределение Коши]{Распределение Коши}
+		\end{figure}
+		
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{"../Lab_1/pictures/Laplace distribution"}
+			\caption[Распределение Лапласа]{Распределение Лапласа}
+		\end{figure}
+		
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{"../Lab_1/pictures/Poisson distribution"}
+			\caption[Распределение Пуассона]{Распределение Пуассона}
+		\end{figure}
+	
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{"../Lab_1/pictures/Uniform distribution"}
+			\caption[Равномерное распределение]{Равномерное распределение}
+		\end{figure}
+		\end{center}
+	
+	\subsection{Характеристики положения и рассеяния}
+		\begin{table}[H]
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|c|}
+					\hline
+					& \multicolumn{2}{c|}{$n=10$} & \multicolumn{2}{c|}{$n=100$} & \multicolumn{2}{c|}{$n=1000$}\\
+					\hline
+					& $E(x)$ (\ref{eqn:expected_value}) & $D(x)$ (\ref{eqn:variance}) & $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$\\
+					\hline
+					$\overline{x}$ (\ref{eqn:average}) & $0.00$ & $0.0985$ & $0.00$ & $0.0107$ & $-0.002$ & $0.0010$\\
+					\hline
+					$med\;x$ (\ref{eqn:med}) & $0.0$ & $0.1337$ & $0.00$ & $0.0149$ & $-0.001$ & $0.0016$\\
+					\hline
+					$z_R$ (\ref{eqn:mean_extr}) & $0.0$ & $0.1847$ & $0.00$ & $0.0928$ & $-0.01$ & $0.0630$\\
+					\hline
+					$z_Q$ (\ref{eqn:quartiles}) & $0.0$ & $0.1177$ & $-0.01$ & $0.0132$ & $-0.004$ & $0.0012$\\
+					\hline
+					$z_{tr} (\ref{eqn:trim_mean}) $ & $0.0$ & $0.1113$ & $0.00$ & $0.0123$ & $-0.002$ & $0.0012$\\
+					\hline
+				\end{tabular}
+			\end{center}
+			\caption{Нормальное распределение}
+		\end{table}
+		
+		\begin{table}[H]
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|c|}
+					\hline
+					& \multicolumn{2}{c|}{$n=10$} & \multicolumn{2}{c|}{$n=100$} & \multicolumn{2}{c|}{$n=1000$}\\
+					\hline
+					& $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$\\
+					\hline
+					$\overline{x}$ & $2.9$ & $8261.4971$ & $-0.3$ & $282.5623$ & $-0.7$ & $1680.6291$\\
+					\hline
+					$med\;x$ & $0.00$ & $0.3821$ & $-0.01$ & $0.0260$ & $-0.002$ & $0.0024$\\
+					\hline
+					$z_R$ & $14.2$ & $206063$ & $-10.5$ & $693687$ & $-358.5$ & $417271337$\\
+					\hline
+					$z_Q$ & $0.0$ & $1.2177$ & $-0.03$ & $0.0493$ & $-0.003$ & $0.0049$\\
+					\hline
+					$z_{tr}$ & $0.0$ & $0.5952$ & $0.00$ & $0.0261$ & $-0.001$ & $0.0026$\\
+					\hline
+				\end{tabular}
+			\end{center}
+			\caption{Распределение Коши}
+		\end{table}
+		
+		\begin{table}[H]
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|c|}
+					\hline
+					& \multicolumn{2}{c|}{$n=10$} & \multicolumn{2}{c|}{$n=100$} & \multicolumn{2}{c|}{$n=1000$}\\
+					\hline
+					& $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$\\
+					\hline
+					$\overline{x}$ & $-0.02$ & $0.0897$ & $-0.002$ & $0.0099$ & $0.002$ & $0.001$\\
+					\hline
+					$med\;x$ & $-0.02$ & $0.0648$ & $0.003$ & $0.0058$ & $0.0003$ & $0.0005$\\
+					\hline
+					$z_R$ & $0.0$ & $0.3887$ & $0.0$ & $0.409$ & $0.0$ & $0.4084$\\
+					\hline
+					$z_Q$ & $-0.01$ & $0.0943$ & $-0.01$ & $0.01$ & $-0.001$ & $0.001$\\
+					\hline
+					$z_{tr}$ & $-0.01$ & $0.0662$ & $0.001$ & $0.0063$ & $0.0007$ & $0.0006$\\
+					\hline
+				\end{tabular}
+			\end{center}
+			\caption{Распределение Лапласа}
+		\end{table}
+		
+		\begin{table}[H]
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|c|}
+					\hline
+					& \multicolumn{2}{c|}{$n=10$} & \multicolumn{2}{c|}{$n=100$} & \multicolumn{2}{c|}{$n=1000$}\\
+					\hline
+					& $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$\\
+					\hline
+					$\overline{x}$ & $10.02$ & $1.0132$ & $10.00$ & $0.0976$ & $9.994$ & $0.0098$\\
+					\hline
+					$med\;x$ & $9.9$ & $1.4617$ & $9.9$ & $0.1944$ & $9.995$ & $0.005$\\
+					\hline
+					$z_R$ & $10.4$ & $1.9290$ & $10.95$ & $1.0299$ & $11.8$ & $0.6673$\\
+					\hline
+					$z_Q$ & $9.9$ & $1.2086$ & $9.9$ & $0.1590$ & $9.995$ & $0.0037$\\
+					\hline
+					$z_{tr}$ & $9.9$ & $1.1459$ & $9.9$ & $0.1166$ & $9.85$ & $0.0107$\\
+					\hline
+				\end{tabular}
+			\end{center}
+			\caption{Распределение Пуассона}
+		\end{table}
+		
+		\newpage
+		\begin{table}[H]
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|c|}
+					\hline
+					& \multicolumn{2}{c|}{$n=10$} & \multicolumn{2}{c|}{$n=100$} & \multicolumn{2}{c|}{$n=1000$}\\
+					\hline
+					& $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$ & $E(x)$ & $D(x)$\\
+					\hline
+					$\overline{x}$ & $-0.02$ & $0.0893$ & $0.000$ & $0.0099$ & $0.001$ & $0.001$\\
+					\hline
+					$med\;x$ & $0.0$ & $0.2088$ & $0.01$ & $0.0294$ & $0.001$ & $0.003$\\
+					\hline
+					$z_R$ & $-0.01$ & $0.0392$ & $0.0002$ & $0.0006$ & $0.0001$ & $0.0000$\\
+					\hline
+					$z_Q$ & $0.0$ & $0.1282$ & $-0.02$ & $0.0146$ & $-0.001$ & $0.0014$\\
+					\hline
+					$z_{tr}$ & $0.0$ & $0.1479$ & $0.00$ & $0.0200$ & $0.001$ & $0.0019$\\
+					\hline
+				\end{tabular}
+			\end{center}
+			\caption{Равномерное распределение}
+		\end{table}
+
+	\subsection{Боксплот Тьюки}
+	\begin{center}
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{"../Lab_3/pictures/Normal distribution"} 
+			\caption[Нормальное распределение]{Нормальное распределение}
+		\end{figure}
+	
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{"../Lab_3/pictures/Cauchy distribution"}
+			\caption[Распределение Коши]{Распределение Коши}
+			
+			\includegraphics[width=\textwidth]{"../Lab_3/pictures/Laplace distribution"}
+			\caption[Распределение Лапласа]{Распределение Лапласа}
+		\end{figure}
+		
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{"../Lab_3/pictures/Poisson distribution"}
+			\caption[Распределение Пуассона]{Распределение Пуассона}
+			
+			\includegraphics[width=\textwidth]{"../Lab_3/pictures/Uniform distribution"}
+			\caption[Равномерное распределение]{Равномерное распределение}
+		\end{figure}
+	\end{center}
+
+	\subsection{Доля выбросов}
+	\begin{table}[H]
+		\begin{center}
+			\begin{tabular}{|c|c|c|c|c|}
+				\hline
+				& \multicolumn{2}{c|}{$n=20$} & \multicolumn{2}{c|}{$n=100$}\\
+				\cline{2-5}
+				\raisebox{1.5ex}[0cm][0cm]{Распределение}
+				& $E$ (\ref{eqn:expected_value}) & $D$ (\ref{eqn:variance}) & $E$ & $D$\\
+				\hline
+				Нормальное распределение & $0.024$ & $0.0019$ & $0.0101$ & $0.0002$ \\
+				\hline
+				Распределение Коши & $0.152$ & $0.0049$ & $0.154$ & $0.0011$\\
+				\hline
+				Распределение Лапласа & $0.074$ & $0.0044$ & $0.0632$ & $0.0009$\\
+				\hline
+				Распределение Пуассона & $0.024$ & $0.0022$ & $0.0105$ & $0.0002$\\
+				\hline
+				Равномерное распределение & $0.0020$ & $0.0002$ & $0.0$ & $0.0$\\
+				\hline
+			\end{tabular}
+		\end{center}
+		\caption{Доля выбросов}
+	\end{table}
+
+	\subsection{Теоретическая вероятность выбросов}
+		\begin{table}[H]
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|}
+					\hline
+					Распределение & $Q^T_1$ & $Q^T_3$ & $X^T_1$ (\ref{eqn:box_plot}) & $X^T_2$ (\ref{eqn:box_plot}) & $P^T_{out}$ (\ref{eqn:continous_prob}), (\ref{eqn:discrete_prob})\\
+					\hline
+					Нормальное распределение & $-0.6745$ & $0.6745$ & $-2.698$ & $2.698$ & $0.007$\\
+					\hline
+					Распределение Коши & $-1$ & $1$ & $-4$ & $4$ & $0.156$\\
+					\hline
+					Распределение Лапласа & $-0.4901$ & $0.4901$ & $-1.9605$ & $1.9605$ & $0.0625$\\
+					\hline
+					Распределение Пуассона & $8$ & $12$ & $2$ & $18$ & $0.0077$\\
+					\hline
+					Равномерное распределение & $-0.866$ & $0.866$ & $-3.4641$ & $3.4641$ & $0$\\
+					\hline
+				\end{tabular}
+			\end{center}
+			\caption{Теоретическая вероятность выбросов}
+		\end{table}
+	
+	\subsection{Эмпирическая функция распределения}
+		\begin{center}
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{"../Lab_4/pictures/Normal distribution (edf)"} 
+				\caption[Нормальное распределение]{Нормальное распределение}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{"../Lab_4/pictures/Cauchy distribution (edf)"}
+				\caption[Распределение Коши]{Распределение Коши}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{"../Lab_4/pictures/Laplace distribution (edf)"}
+				\caption[Распределение Лапласа]{Распределение Лапласа}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{"../Lab_4/pictures/Poisson distribution (edf)"}
+				\caption[Распределение Пуассона]{Распределение Пуассона}
+			\end{figure}
+			
+			\begin{figure}[H]			
+				\includegraphics[width=\textwidth]{"../Lab_4/pictures/Uniform distribution (edf)"}
+				\caption[Равномерное распределение]{Равномерное распределение}
+			\end{figure}
+		\end{center}
+	
+	\subsection{Ядерные оценки плотности распределения}
+		\begin{center}
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{"../Lab_4/pictures/Normal distribution (kernel)"} 
+				\caption[Нормальное распределение]{Нормальное распределение}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{"../Lab_4/pictures/Cauchy distribution (kernel)"}
+				\caption[Распределение Коши]{Распределение Коши}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\includegraphics[width=\textwidth]{"../Lab_4/pictures/Laplace distribution (kernel)"}
+				\caption[Распределение Лапласа]{Распределение Лапласа}
+			\end{figure}
+			
+			\begin{figure}[hp!]
+				\includegraphics[width=\textwidth]{"../Lab_4/pictures/Poisson distribution (kernel)"}
+				\caption[Распределение Пуассона]{Распределение Пуассона}
+			\end{figure}
+			
+			\begin{figure}[hp!]			
+				\includegraphics[width=\textwidth]{"../Lab_4/pictures/Uniform distribution (kernel)"}
+				\caption[Равномерное распределение]{Равномерное распределение}
+			\end{figure}
+		\end{center}
+	
+\newpage
+\section{Обсуждение}
+	\subsection{Гистограмма и график плотности распределения}
+		Исходя из полученных результатов можно сделать следующие выводы:
+		\begin{itemize}
+			\item От количества выборки зависит качество оценки плотности распределеня с помощью гистрограммы. Чем больше выборка, тем эта оценка выше.
+			
+			\item В гистрограмме могут наблюдатся выбросы, обусловленные вероятностной природой изучаемого процесса, а также разбиением выборки на малое количество интервалов при построении гистрограммы.
+		\end{itemize}
+
+	\subsection{Характеристики положения и рассеяния}
+		Исходя из полученных результатов можно сделать следующие выводы:
+		\begin{itemize}
+			\item Дисперсия может гарантировать порядок точности среднего значения только до первой значащей цифры после запятой в дисперсии включительно. Поэтому есть необходимость проверки данных результатов на совпадение этой точности.
+			
+			\item При увеличении количества выборки гарантируемая точность будет возрастать.
+			
+			\item Предыдущие выводы касаются всех распределений, кроме распределения Коши. Так как оно имеет бесконечную дисперсию и, следовательно, никакой точности гарантировать не может.
+			
+			\item Можно вывести следующее отношение для характеристик положения при $n=1000$:
+			\begin{enumerate}
+				\item для нормального распределения: $z_R < z_Q < z_{tr} \leq \overline{x} < med\;x$;
+				
+				\item для распределения Коши: $z_R < \overline{x} < z_Q < med\;x < z_{tr}$;
+				
+				\item для распределения Лапласа: $z_Q < z_R < med\;x < z_{tr} < \overline{x}$;
+				
+				\item для распределения Пуассона: $ z_{tr} < \overline{x} < z_Q \leq med\;x < z_R$;
+				
+				\item для равномерного распределения: $z_Q < z_R < z_{tr} \leq med\;x \leq \overline{x}$.
+			\end{enumerate}
+		\end{itemize}
+	
+	\subsection{Боксплот Тьюки и доля выбросов}
+		Исходя из полученных результатов можно сделать следующие выводы:
+		\begin{itemize}
+			\item Справедливо следующее соотношение для долей выбросов:\\
+			равномерное распределение < нормальное распределение < распределение Пуассона < распределение Лапласа < распределение Коши.
+			
+			\item Доля выбросов, полученная экспериментально, близка с результатами, полученными теоретически.
+		\end{itemize}
+	
+	\subsection{Эмпирическая функция и ядерные оценки плотности распределения}
+		Исходя из полученных результатов можно сделать следующие выводы:
+		\begin{itemize}
+			\item При увеличении размера выборки  качество оценки эмперической функцией эталонной функции распределения возрастает.
+			
+			\item При увеличении размера выборки  качество ядерной оценки плотности распределения возрастает.
+			
+			\item Наилучшее качество ядерной оценки плотности распределения достигается при следующих параметрах:
+			\begin{enumerate}
+				\item для нормального распределения --- $h=h_n$;
+				
+				\item для распределения Коши --- $h=h_n$;
+				
+				\item для распределения Лапласа --- $h=\frac{h_n}{2}$ или $h=h_n$;
+				
+				\item для распределения Пуассона --- $h=2h_n$;
+				
+				\item для равномерного распределения --- $h=\frac{h_n}{2}$ или $h=h_n$.
+			\end{enumerate}
+		\end{itemize}
+
+
+
+\section{Литература}
+	\begin{enumerate}
+		\item \label{Book_1} \textbf{Вероятностные разделы математики.} Учебник для бакалавров технических направлений.//Под ред. Максимова~Ю.Д. --- Спб.: «Иван Федоров», 2001. --- 592 c., илл.
+		
+		\item \label{Book_2} Анатольев, Станислав (2009) «Непараметрическая регрессия», Квантиль, №7, стр. 37-52.
+		
+		\item \label{Histogram} Histogram. URL: \url{https://en.wikipedia.org/wiki/Histogram};
+		
+		\item \label{Box plot} Box plot. URL: \url{https://en.wikipedia.org/wiki/Box_plot};
+		
+		\item Kernel density estimation. URL: \url{https://en.wikipedia.org/wiki/Kernel_density_estimation}.
+	\end{enumerate}
+
+\section{Приложение}
+	\begin{enumerate}
+		\item Код лабораторной №1. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_1/Lab_1.ipynb}
+		
+		\item Код отчёта №1. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_1/Lab_report_1.tex}
+		
+		\item Код лабораторной №2. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_2/Lab_2.ipynb}
+		
+		\item Код отчёта №2. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_2/Lab_report_2.tex}
+		
+		\item Код лабораторной №3. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_3/Lab_3.ipynb}
+		
+		\item Код отчёта №3. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_3/Lab_report_3.tex}
+		
+		\item Код лабораторной №4. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_4/Lab_4.ipynb}
+		
+		\item Код отчёта №4. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_4/Lab_report_4.tex}
+		
+		\item Код общего отчёта №1-4. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_1-4/Lab_report_1-4.tex}	
+	\end{enumerate}
+\end{document}
