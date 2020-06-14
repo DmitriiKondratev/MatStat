@@ -1,0 +1,178 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{misccorr}
+
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.png,.jpg}
+
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+	\begin{titlepage}
+		\begin{center}			
+			Санкт-Петербургский политехнический университет\\
+			Петра Великого
+			\vspace{0.25cm}
+			
+			Институт прикладной математики и механики
+			
+			Кафедра «Прикладная математика»
+			\vfill
+			
+			\textbf{Отчёт\\
+				по лабораторной работе №8\\
+				по дисциплине\\
+				«Математическая статистика»}\\[5mm]
+			\bigskip
+		\end{center}
+		\vfill
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Выполнил студент:
+			\vspace{0.2cm}
+			
+			Кондратьев~Д.~А.\\
+			группа: 3630102/70301
+		\end{minipage}%
+		\bigskip
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Проверил:
+			\vspace{0.2cm}
+			
+			к.ф.-м.н., доцент\\
+			Баженов Александр Николаевич
+		\end{minipage}%
+		\vfill
+		
+		\begin{center}
+			Санкт-Петербург\\
+			2020 г.
+		\end{center}
+	\end{titlepage}
+	
+	
+	
+	\tableofcontents{}
+	\listoftables
+	
+	\newpage
+	\section{Постановка задачи}
+		Для двух выборок размерами 20 и 100 элементов, сгенерированных согласно нормальному закону $N(x, 0, 1)$, для параметров положения и масштаба построить асимптотически нормальные интервальные оценки на основе точечных оценок метода максимального правдоподобия и классические интервальные оценки на основе статистик $\chi^2$ и Стьюдента. В качестве параметра надёжности взять $\gamma = 0.95$.
+	
+	\section{Теория}
+	\subsection{Доверительные интервалы для параметров нормального распределения}
+	Оценкой максимального правдоподобия для математического ожидания  является среднее арифметическое: $\mu=\frac{1}{n}\sum\limits_{i=1}^nx_i.$
+	
+	Оценка максимального правдоподобия для дисперсии вычисляется по формуле: $\sigma^2 = \frac{1}{n}\sum\limits_{i=1}^n(x_i-\overline{x})^2.$
+	
+	Доверительным интервалом или интервальной оценкой числовой характеристики или параметра распределения $\theta$ с доверительной вероятностью $\gamma$ называется интервал со случайными границами $(\theta_1,\theta_2),$ содержащий параметр $\theta$ с вероятностью $\gamma$.
+	
+	Функция распределения Стьюдента:
+	\begin{equation}
+	T = \sqrt{n-1}\frac{\overline{x}-\mu}{\delta}
+	\end{equation}
+	
+	Функция плотности распределения $\chi^2$:
+	\begin{equation}
+	f(x) =
+	\begin{cases}
+	0,&x\leq 0\\
+	\frac{1}{2^\frac{n}{2}\Gamma\left(\frac{n}{2}\right)}x^{\frac{n}{2}-1}e^{-\frac{x}{2}},& x>0
+	\end{cases}
+	\end{equation}
+
+	Интервальная оценка математического ожидания:
+	\begin{equation}
+	P=\left(\overline{x}-\frac{\sigma t_{1-\frac{\alpha}{2}}(n-1)}{\sqrt{n-1}}<\mu<\overline{x}+\frac{\sigma t_{1-\frac{\alpha}{2}}(n-1)}{\sqrt{n-1}}\right) = \gamma,
+	\end{equation}
+	где $t_{1-\frac{\alpha}{2}}$ --- квантиль распределения Стьюдента порядка $1-\frac{\alpha}{2}$.
+	
+	Интервальная оценка дисперсии:
+	\begin{equation}
+	P=\left(\frac{\sigma\sqrt{n}}{\sqrt{\chi^2_{1-\frac{\alpha}{2}}(n-1)}}<\sigma<\frac{\sigma\sqrt{n}}{\sqrt{\chi^2_\frac{\alpha}{2}(n-1)}}\right) = \gamma,
+	\end{equation}
+	где $\chi_{1-\frac{\alpha}{2}}^2,\;\chi_\frac{\alpha}{2}^2\;$ --- квантили распределения Стьюдента порядков $1-\frac{\alpha}{2}$ и $\frac{\alpha}{2}$ соответственно.
+	
+	\subsection{Доверительные интервалы для математического ожидания m и среднего квадратического отклонения $\sigma$ произвольного распределения при большом объёме выборки. Асимптотический подход}
+	
+	Асимптотическая интервальная оценка математического ожидания:
+	\begin{equation}
+	P = \left(\overline{x}-\frac{\sigma u_{1-\frac{\alpha}{2}}}{\sqrt{n}}<m<\overline{x}+\frac{\sigma u_{1-\frac{\alpha}{2}}}{\sqrt{n}}\right)=\gamma,
+	\end{equation}
+	где $u_{1-\frac{\alpha}{2}}\;\--$ квантиль нормального распределения $N(x,0,1)$ порядка $1-\frac{\alpha}{2}$.
+	\begin{equation}
+	\sigma(1 - 0.5u_{1 - \alpha/2} \sqrt{e + 2}/ \sqrt{n}) < \sigma < \sigma(1 + 0.5u_{1 - \alpha/2} \sqrt{e + 2}/ \sqrt{n})
+	\end{equation}
+	
+	\section{Реализация}
+		Лабораторная работа выполнена на программном языке \emph{Python\;3.8} в среде разработки \emph{Jupyter Notebook\;6.0.3}. В работе использовались следующие пакеты языка \emph{Python}:
+		\begin{itemize}
+			\item \emph{numpy} --- для генерации выборки и работы с массивами;
+			
+			\item \emph{scipy.stats} --- содержит все необходимые распределения.
+		\end{itemize}
+		Ссылка на исходный код лабораторной работы приведена в приложении.
+
+	\section{Результаты}
+		\subsection{Доверительные интервалы для параметров нормального распределения}
+		\begin{table}[H]
+			\begin{center}
+				\begin{tabular}{|c|c|c|}
+					\hline
+					$n$ & $m$ & $\sigma$\\
+					\hline
+					$20$ & $(-0.62; 0.28)$ & $(0.73; 1.40)$\\ 
+					\hline
+					$100$ & $(-0.24; 0.12)$ & $(0.81; 1.07)$\\
+					\hline
+				\end{tabular}
+			\end{center}
+			\caption{Доверительные интервалы для параметров нормального распределения}
+		\end{table}
+		
+		\subsection{Доверительные интервалы для параметров произвольного распределения. Асимптотический подход}
+		\begin{table}[H]
+			\begin{center}				
+				\begin{tabular}{|c|c|c|}
+					\hline
+					$n$ & $m$ & $\sigma$\\
+					\hline
+					$20$ & $(-0.58; 0.24)$ & $(0.83; 1.09)$\\ 
+					\hline
+					$100$ & $(-0.24; 0.12)$ & $(0.86; 1.01)$\\
+					\hline
+				\end{tabular}
+			\end{center}
+			\caption{Доверительные интервалы для параметров произвольного распределения. Асимптотический подход}
+		\end{table}
+	
+	\section{Обсуждение}
+	Исходя из полученных результатов можно сделать следующие выводы:
+	\begin{itemize}
+		\item Генеральные характеристики ($m = 0$ и $\sigma = 1$) накрываются построенными доверительными интервалами.
+		
+		\item Лучший результат достигается на выборках большого объема, так как получаемые интервалы получаются меньшей длины.
+		
+		\item Доверительные интервалы для параметров нормального распределения более надёжны, так как основаны на точном, а не асимптотическом распределении.
+	\end{itemize}
+	
+	\section{Литература}
+	\begin{enumerate}
+		\item \label{Book_1} \textbf{Вероятностные разделы математики.} Учебник для бакалавров технических направлений.//Под ред. Максимова~Ю.Д. --- Спб.: «Иван Федоров», 2001. --- 592 c., илл.
+		
+		\item Confidence interval. URL: \url{https://en.wikipedia.org/wiki/Confidence_interval}
+	\end{enumerate}
+
+	\section{Приложение}
+	\begin{enumerate}
+		\item Код лабораторной. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_8/Lab_8.ipynb}
+		
+		\item Код отчёта. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_8/Lab_report_8.tex}
+		
+	\end{enumerate}
+\end{document}
