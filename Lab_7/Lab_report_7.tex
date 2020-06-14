@@ -1,0 +1,165 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{misccorr}
+
+\usepackage{graphicx}
+\graphicspath{{pictures/}}
+\DeclareGraphicsExtensions{.png,.jpg}
+
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+	\begin{titlepage}
+		\begin{center}			
+			Санкт-Петербургский политехнический университет\\
+			Петра Великого
+			\vspace{0.25cm}
+			
+			Институт прикладной математики и механики
+			
+			Кафедра «Прикладная математика»
+			\vfill
+			
+			\textbf{Отчёт\\
+				по лабораторной работе №7\\
+				по дисциплине\\
+				«Математическая статистика»}\\[5mm]
+			\bigskip
+		\end{center}
+		\vfill
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Выполнил студент:
+			\vspace{0.2cm}
+			
+			Кондратьев~Д.~А.\\
+			группа: 3630102/70301
+		\end{minipage}%
+		\bigskip
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Проверил:
+			\vspace{0.2cm}
+			
+			к.ф.-м.н., доцент\\
+			Баженов Александр Николаевич
+		\end{minipage}%
+		\vfill
+		
+		\begin{center}
+			Санкт-Петербург\\
+			2020 г.
+		\end{center}
+	\end{titlepage}
+	
+	
+	
+	\tableofcontents{}
+	\listoftables
+	
+	\newpage
+	\section{Постановка задачи}
+	Сгенерировать выборку объёмом 100 элементов для нормального распределения $N(x, 0, 1)$. По сгенерированной выборке оценить параметры $\mu$ и $\sigma$ нормального закона методом максимального правдоподобия. В качестве основной гипотезы $H_0$ будем считать, что сгенерированное распределение имеет вид $N(x, \hat{\mu}, \hat{\sigma})$. Проверить основную гипотезу, используя критерий согласия $\chi^2$. В качестве уровня значимости взять $\alpha = 0.05$. Привести таблицу вычислений $\chi^2$.
+	\section{Теория}
+	\subsection{Метод максимального правдоподобия}
+	Метод максимального правдоподобия --- метод оценивания неизвестного параметра путём максимимзации функции правдоподобия.
+	
+	\begin{equation}
+	\hat{\theta}_{\text{МП}} = \arg \max_\theta L(x_1,x_2,\ldots,x_n,\theta)
+	\end{equation}
+	где $L$ --- функция правдоподобия, которая представляет собой совместную плотность вероятности независимых случайных величин $x_1,x_2,\ldots,x_n$ и является функцией неизвестного параметра $\theta$.
+	\begin{equation}
+	L = f(x_1,\theta)\cdot f(x_2,\theta)\cdot\cdots\cdot f(x_n,\theta)
+	\end{equation}
+	Оценкой максимального правдоподобия будем называть такое значение $\hat{\theta}_{\text{МП}}$ из множества допустимых значений параметра $\theta,$ для которого функция правдоподобия принимает при заданных $x_1, x_2, \ldots, x_n$ максимальное значение.
+	
+	Тогда при оценивании математического ожидания $m$ и дисперсии $\sigma^2$ нормального распределения $N(m,\sigma)$ получим:
+	\begin{equation}
+	\ln(L)=-\frac{n}{2}\ln(2\pi)-\frac{n}{2}\ln\left(\sigma^2\right)-\frac{1}{2\sigma^2}\sum\limits_{i=1}^n(x_i-m)^2
+	\end{equation}
+	
+	\subsection{Проверка гипотезы о законе распределения генеральной совокупности. Метод хи-квадрат}
+	Разобьём генеральную совокупность на $k$ неперсекающихся подмножеств $\Delta_1, \Delta_2,\ldots, \Delta_k,\;\Delta_i = (a_i,a_{i+1}],$ $p_i = P(X\in\Delta_i),\;i=1,2,\ldots,k\;$ --- вероятность того, что точка попала в $i$-ый промежуток.
+	
+	Так как генеральная совокупность --- это $\mathbb{R}$, то крайние промежутки будут бесконечными: $\Delta_1 = (-\infty,a_1], \;\Delta_k = (a_k,\infty), \;p_i = F(a_i) - F(a_{i-1})$.
+	
+	$n_i\;\--$ частота попадания выборочных элементов в $\Delta_i,\;i=1,2,\ldots,k.$
+	
+	В случае справедливости гипотезы $H_0$ относительно частоты $\frac{n_i}{n}$ при больших $n$ должны быть близки к $p_i,$ значит в качестве меры имеет смысл взять: 
+	
+	\begin{equation}
+	Z = \sum\limits_{i=1}^k\frac{n}{p_i}\left(\frac{n_i}{n}-p_i\right)^2
+	\end{equation}
+	
+	Тогда:
+	\begin{equation}
+	\chi^2_B=\sum\limits_{i=1}^k\frac{n}{p_i}\left(\frac{n_i}{n}-p_i\right)^2=\sum\limits_{i=1}^k\frac{(n_i-np_i)^2}{np_i}
+	\end{equation}
+	
+	\textbf{Теорема К.Пирсона.} Статистика критерия $\chi^2$ асимптотически распределена по закону $\chi^2$ с $k - 1$ степенями свободы.
+	
+	\section{Реализация}
+		Лабораторная работа выполнена на программном языке \emph{Python\;3.8} в среде разработки \emph{Jupyter Notebook\;6.0.3}. В работе использовались следующие пакеты языка \emph{Python}:
+		\begin{itemize}
+			\item \emph{numpy} --- для генерации выборки и работы с массивами;
+			
+			\item \emph{tabulate} --- для построения таблиц;
+			
+			\item \emph{scipy.stats} --- содержит необходимые распределения и критерий $\chi^2$.
+		\end{itemize}
+		Ссылка на исходный код лабораторной работы приведена в приложении.
+
+	\section{Результаты}
+		\subsection{Проверка гипотезы о законе распределения генеральной совокупности. Метод хи-квадрат}
+		Метод максимального правдоподобия:
+		$$\hat{\mu} \approx 0.01, \quad \hat{\sigma} \approx 1.02.$$
+		
+		Критерий согласия $\chi^2$:\\
+		Количество промежутков $k = 6$.\\
+		Уровень значимости $\alpha = 0.05$.
+		\begin{table}[H]
+			\begin{center}
+				\begin{tabular}{|c|c|c|c|c|c|c|}
+					\hline
+					$i$ & $\Delta_i$          &   $n_i$ &   $p_i$ &   $np_i$ &   $n_i-np_i$ &   $\frac{(n_i-np_i)^2}{np_i}$ \\
+					\hline
+					   1   & $(-\infty, -1.01]$ & $16$  & $0.1562$ & $15.62$ & $0.38$  & $0.01$ \\
+					   2   & $(-1.01, -0.37]$   & $17$  & $0.2004$ & $20.04$ & $-3.04$ & $0.46$ \\
+					   3   & $(-0.37, 0.28]$    & $31$  & $0.2517$ & $25.17$ & $5.83$  & $1.35$ \\
+					   4   & $(0.28, 0.92]$     & $18$  & $0.2122$ & $21.22$ & $-3.22$ & $0.49$ \\
+					   5   & $(0.92, 1.56]$     & $10$  & $0.1201$ & $12.01$ & $-2.01$ & $0.34$ \\
+					   6   & $(1.56, \infty]$   & $8$   & $0.0594$ & $5.94$  & $2.06$  & $0.72$ \\
+					$\sum$ & ---                & $100$ & $1.0000$ & $100$   & $0.00$  & $3.36 = \chi^2_B$ \\
+					\hline
+				\end{tabular}
+			\end{center}
+			\caption{Вычисление $\chi^2_B$ при проверке гипотизы $H_0$ о нормальном законе распределения N($x, \hat{\mu}, \hat{\sigma}$)}
+		\end{table}
+
+	\section{Обсуждение}
+	Табличное значение квартиля $\chi^2_{1 - \alpha}(k - 1) = \chi^2_{0.95}(5) = 11.07$.
+	
+	Исходя из полученных результатов можно сделать следующие выводы:
+	\begin{itemize}
+		\item Так как $\chi^2_B < \chi^2_{0.95}(5)$, то можно заключить, что гипотеза $H_0$ о нормальном законе распределения $N(x, \hat{\mu}, \hat{\sigma})$ на уровне значимости $\alpha = 0.05$, согласуется с выборкой.
+	\end{itemize}
+	
+	\section{Литература}
+	\begin{enumerate}		
+		\item Maximum likelihood estimation. URL: \url{https://en.wikipedia.org/wiki/Maximum_likelihood_estimation}
+		
+		\item Chi-squared test. URL: \url{https://en.wikipedia.org/wiki/Chi-squared_test}
+	\end{enumerate}
+
+	\section{Приложение}
+	\begin{enumerate}
+		\item Код лабораторной. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_7/Lab_7.ipynb}
+		
+		\item Код отчёта. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Lab_7/Lab_report_7.tex}
+		
+	\end{enumerate}
+\end{document}
