@@ -1,9 +1,14 @@
 ## Tex files:
 *.aux
 *.log
-*.pdf
 *.synctex.gz
 *.toc
+
+*.lof
+*.lot
+*.out
+*.txt
+*.png
 
 ## Jupiter Notebook files:
 *.ipynb_checkpoints
