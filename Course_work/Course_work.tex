@@ -1,0 +1,183 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{misccorr}
+
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.png,.jpg}
+
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\begin{document}
+	\begin{titlepage}
+		\begin{center}			
+			Санкт-Петербургский политехнический университет\\
+			Петра Великого
+			\vspace{0.25cm}
+			
+			Институт прикладной математики и механики
+			
+			Высшая школа прикладной математики и вычислительной физики
+			\vfill
+			
+			\textbf{Отчёт\\
+				по курсовой работе\\
+				по дисциплине\\
+				«Математическая статистика»}\\[5mm]
+			\bigskip
+		\end{center}
+		\vfill
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Выполнил студент:
+			\vspace{0.2cm}
+			
+			Кондратьев~Д.~А.\\
+			группа: 3630102/70301
+		\end{minipage}%
+		\bigskip
+		
+		\hfill\begin{minipage}{0.45\textwidth}
+			Проверил:
+			\vspace{0.2cm}
+			
+			к.ф.-м.н., доцент\\
+			Баженов Александр Николаевич
+		\end{minipage}%
+		\vfill
+		
+		\begin{center}
+			Санкт-Петербург\\
+			2020 г.
+		\end{center}
+	\end{titlepage}
+	
+	
+	
+	\tableofcontents{}
+	\listoftables
+	\listoffigures
+	
+	\newpage
+	\section{Постановка задачи}
+		Есть набор 2D данных в текстовом формате – следы жизни в геологических
+		объектах. Образцы взяты с двух разных регионов:
+		\begin{itemize}
+			\item русского севера;
+			\item центральной Африки.
+		\end{itemize}
+	
+		На объект подавалось излучение от ближнего ультрафиолетового до видимого. Длина волны — первая переменная $x_1$.
+		
+		Когда свет с заданной $x_1$ попадал в объект, его поглощали молекулы и в свою очередь, излучали свет с длинами волны $x_2$ примерно в том же диапазоне.
+		
+		То, что они излучали записывается в виде графика $I(x_1 = const, x_2)$.
+		
+		Далее, $x_1$ варьируются, и формируется $I(x_1, x_2
+		)$. Функция 2-х переменных.
+		
+		Пики на графике $I$ можно идентифицировать с излучением протеиногенных аминокислот, т.е. это остатки органической жизни.
+		
+		Известна область для каждой аминокислоты в координатах $(x_1, x_2)$.
+		
+		\hfill
+		
+		Для классификации двух типов данных ранее был предложен параметр K (на основании C, A, B, T), который позволяет достаточно уверенно проводить разделение этих типов. При этом не использовались данные по переменной M.
+		
+		Необходимо:
+		\begin{itemize}
+			\item построить двумерное поле $(M, K)$ для Африки и Арктики;
+			\item проанализировать полученный результат.
+		\end{itemize}
+	
+	\section{Теория}
+		\subsection {Используемые параметры}
+		\begin{table}[H]
+			\begin{center}
+				\begin{tabular}{|c|p{100pt}|c|c|}
+					\hline
+					Буквенное обозначение & Тип компонента & $E_{x_{max}}(nm)$ & $E_{m_{max}}(nm)$ \\
+					\hline
+					C & Humic-like & $320-350$ & $420-480$ \\
+					\hline
+					A & Humic-like & $250-260$ & $380-480$ \\
+					\hline
+					M & Mariane
+					Humic-like & $310-320$ & $380-420$ \\
+					\hline
+					B & Tysone-like,
+					Protein-like & $270-280$ & $300-320$ \\
+					\hline
+					T & Tryptophane-like,
+					Protein-like or
+					phenol-like & $270-280$ & $320-350$ \\
+					\hline
+				\end{tabular}
+				\caption{Таблица интенсивностей}
+				\label{table:intensity}
+			\end{center}
+		\end{table}
+		
+		Параметр $K$, ранее использовавшийся для сравнения данных, выражет отношение сложной и простой органики и вычисляется по формуле:
+		\begin{equation}\label{eqn:K}
+			K = \frac{C+A}{B+T}
+		\end{equation}
+	
+		\subsection {Подготовка данных}
+		По полученным данным были получены изображения, далее были обрезаны релеевские облучения и выделены области в соответствии с таблицей интенсивностей [\ref{table:intensity}]. После были посчитаны суммарные интенсивности каждых областей, по которым в дальнейшем будет вестить исследование.
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{"../Course_work/pictures/example"} 
+			\caption[Обработанный файл с выделенными областями]{Обработанный файл с выделенными областями}
+		\end{figure}
+	
+	\section{Реализация}
+		Курсовая работа выполнена на программном языке \emph{Python\;3.8} в среде разработки \emph{Jupyter Notebook\;6.0.3}. В работе использовались следующие пакеты языка \emph{Python}:
+		\begin{itemize}
+			\item \emph{numpy} --- для обработки исходных данных и работы с массивами;
+			
+			\item \emph{matplotlib} --- для визуализации результатов.
+		\end{itemize}
+		Ссылка на исходный код курсовой работы приведена в приложении.
+		
+	\newpage
+	\section{Результаты}
+		Исходя из полученных данных $(M, K)$ были построены следующие двумерные поля:
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{"../Course_work/pictures/fields"} 
+			\caption[Двумерные поля Африки и севера России]{Двумерные поля Африки и севера России}
+		\end{figure}
+	
+		\begin{figure}[H]
+			\includegraphics[width=\textwidth]{"../Course_work/pictures/common_picture"} 
+			\caption[Совместное двумерное поле Африки и севера России]{Совместное двумерное поле Африки и севера России}
+		\end{figure}
+	
+	\section{Обсуждение}
+	Исходя из полученных результатов можно сделать следующие выводы:
+	\begin{itemize}
+		\item Для севера России характерен больший разброс точек по сравнению с Африкой, где они расположены более кучно.
+		
+		\item Для почти всех координат севера России справедливо утверждение, что при увеличении $M$ $K$ возрастает.
+		
+		\item Для определения области лучше опираться на параметр K, так как он дает более четкую картину поведения аминокислот, характерную для конкретную область.
+		
+		\item Также, используя данные поля, можно поставить задачу классификации и построить алгоритм, определяющий область по координатам $(M,K)$.
+	\end{itemize}
+	
+	\section{Литература}
+	\begin{enumerate}
+		\item Документация \emph{numpy}. URL: \url{https://numpy.org/doc/stable/reference/}
+		\item Документация \emph{matplotlib}. URL: \url{https://matplotlib.org/3.2.1/contents.html}
+	\end{enumerate}
+
+	\section{Приложение}
+	\begin{enumerate}
+		\item Код лабораторной. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Course_work/Course_work.ipynb}
+		
+		\item Код отчёта. URL: \url{https://github.com/DmitriiKondratev/MatStat/blob/master/Course_work/Course_work_report.tex}
+		
+	\end{enumerate}
+\end{document}
